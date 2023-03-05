@@ -1,12 +1,14 @@
+import 'package:app_first/login/singupmix_screen.dart';
 import 'package:app_first/menu/home_screen.dart';
-import 'package:app_first/login_screen.dart';
-import 'package:app_first/singup_screen.dart';
+import 'package:app_first/login/login_screen.dart';
+import 'package:app_first/login/singup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class FirstPage extends StatelessWidget {
   const FirstPage({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,7 @@ class FirstPage extends StatelessWidget {
             const SizedBox(height: 12),
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SingupScreen(),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const singupmix(),));
               },
               child: Container(
                 width: 200,

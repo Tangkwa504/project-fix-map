@@ -1,12 +1,12 @@
 import 'package:app_first/first_page.dart';
 import 'package:app_first/profile/profile_page.dart';
-import 'package:app_first/singup_screen.dart';
+import 'package:app_first/login/singup_screen.dart';
 import 'package:app_first/widgets/bottonhome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-import '../login_screen.dart';
+import '../login/login_screen.dart';
 import '../map/map.dart';
 
 class HomePage extends StatefulWidget {

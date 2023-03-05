@@ -1,11 +1,11 @@
-import 'package:app_first/login_screen.dart';
-import 'package:app_first/singup2_screen.dart';
+import 'package:app_first/menu/home_screen.dart';
+import 'package:app_first/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class SingupScreen extends StatelessWidget {
-  const SingupScreen({super.key});
+class Singup2Screen extends StatelessWidget {
+  const Singup2Screen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class SingupScreen extends StatelessWidget {
         height: double.infinity,
         padding: const EdgeInsets.all(12),
         child: Column(  
-          crossAxisAlignment: CrossAxisAlignment.start,
+          //crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
             const Text(
@@ -44,7 +44,7 @@ class SingupScreen extends StatelessWidget {
               child: const TextField( 
                 textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
-                  hintText: "Email address",
+                  hintText: "Name",
                   border: InputBorder.none,
                 ),
               ),
@@ -60,7 +60,7 @@ class SingupScreen extends StatelessWidget {
               child: const TextField( 
                 textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
-                  hintText: "Password",
+                  hintText: "Address",
                   border: InputBorder.none,
                 ),
               ),
@@ -76,7 +76,7 @@ class SingupScreen extends StatelessWidget {
               child: const TextField( 
                 textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
-                  hintText: "Confirm Password",
+                  hintText: "Tel:",
                   border: InputBorder.none,
                 ),
               ),
@@ -84,7 +84,7 @@ class SingupScreen extends StatelessWidget {
             const SizedBox(height: 12),
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const Singup2Screen(),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen(),));
               },
               child: Container(
                 width: 400,
@@ -96,12 +96,12 @@ class SingupScreen extends StatelessWidget {
                   color: Color.fromARGB(255, 243, 16, 72),
                 ),
                 child: const Text( 
-                  "NEXT",
+                  "REGISTER",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
             ),
-            const SizedBox(height: 12),   
+            const SizedBox(height: 12),      
             Row( 
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -122,7 +122,7 @@ class SingupScreen extends StatelessWidget {
                   ),
               ),
               ],
-            ),        
+            ),             
           ],
         ),
       ),

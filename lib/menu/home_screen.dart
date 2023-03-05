@@ -1,6 +1,9 @@
 import 'package:app_first/profile/profile.dart';
 import 'package:flutter/material.dart';
 
+import '../Shoppingcart.dart';
+import '../chat.dart';
+import '../firebase.dart';
 import 'home_page.dart';
 import '../map/map.dart';
 import '../profile/profile_page.dart';
@@ -24,8 +27,8 @@ class _HomeScreenState
 
 
 
-      const Center(child: Icon(Icons.chat, size: 64.0, color: Colors.cyan)),
-      const Center(child: Icon(Icons.shopping_cart, size: 64.0, color: Colors.green)),
+      const MyApp(),
+      ShoppingCart(),
       const ProfilePage(),
     ];
     final _kBottmonNavBarItems = <BottomNavigationBarItem>[
