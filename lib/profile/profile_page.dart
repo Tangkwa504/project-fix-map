@@ -1,8 +1,14 @@
+import 'dart:convert';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:firebase_core/firebase_core.dart';
 
+import '../firebase.dart';
+import '../firebase_options.dart';
 import '../first_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -11,8 +17,15 @@ class ProfilePage extends StatefulWidget {
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
+List<Info> list = [];
 
 class _ProfilePageState extends State<ProfilePage> {
+    @override
+  void initState() {
+    // TODO: implement initState
+    initfirebase();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -75,7 +88,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 80),
                         InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstPage(),));
+                
+                checkuser();
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstPage(),));
               },
               child: Container(
                 width: 200,
@@ -140,3 +155,42 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
+void checkuser() {
+  
+  print("Testcheck");
+  //print(password);
+}
+
+  void initfirebase() async {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+
+  }
+
+  void readfirebase(user, password,context) async {
+    DatabaseReference starCountRef = FirebaseDatabase.instance.ref('User');
+    starCountRef.onValue.listen((DatabaseEvent event) {
+      final data = event.snapshot.value;
+      Map<String, dynamic> map = json.decode(json.encode(data));
+      print(map);
+      list = [];
+      map.forEach(
+        (key, value) {
+          print(key);
+          // if(user==value["Email"]){
+          //   if(password==value["Password"]){
+          //     print("mail");
+          //   }else{
+          //     print("errorpass");
+          //   }
+          // }else{
+          //   print("error");
+          // }
+        },
+      );
+      list.forEach((element) {
+        print("$element");
+      });
+    });
+  }
