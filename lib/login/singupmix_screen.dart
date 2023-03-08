@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../firebase_options.dart';
 import 'login_screen.dart';
@@ -14,6 +15,7 @@ String Password = "";
 String Name = ""; 
 String Address = "";
 String Tel = "";
+String Password2 = "";
 
 class singupmix extends StatefulWidget {
   const singupmix({super.key});
@@ -25,6 +27,7 @@ class singupmix extends StatefulWidget {
 class _singupmixState extends State<singupmix> {
   TextEditingController Emailinput = TextEditingController(); // ตั้งค่าชื่อตัวแปรที่รับจากผู้ใช้
   TextEditingController UserPass = TextEditingController();
+   TextEditingController Checkpass = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +96,8 @@ class _singupmixState extends State<singupmix> {
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.grey.withOpacity(0.4),
               ),
-              child: const TextField( 
+              child: TextField( 
+                controller: Checkpass,
                 textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
                   hintText: "Confirm Password",
@@ -104,9 +108,23 @@ class _singupmixState extends State<singupmix> {
             const SizedBox(height: 12),
             InkWell(
               onTap: () {
+                if (Emailinput.text.isNotEmpty&&UserPass.text.isNotEmpty&&Checkpass.text.isNotEmpty&&UserPass.text==Checkpass.text) {
                 Email = Emailinput.text;
                 Password = UserPass.text;
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const singupmix2(),));
+                
+                }else if(UserPass.text!=Checkpass.text){
+                        Fluttertoast.showToast(
+                            msg: "รหัสผ่านไม่ตรงกัน",
+                            gravity: ToastGravity.TOP);
+                }else {
+                        Fluttertoast.showToast(
+                            msg: "โปรดกรอกข้อมูลให้ครบถ้วน",
+                            gravity: ToastGravity.TOP);
+                      }
+                // Email = Emailinput.text;
+                // Password = UserPass.text;
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const singupmix2(),));
               },
               child: Container(
                 width: 400,
@@ -249,11 +267,27 @@ class _singupmix2State extends State<singupmix2> {
             const SizedBox(height: 12),
             InkWell(
               onTap: () {
-                Name = Fullname.text;
-                Address = UserAddress.text;
-                Tel = UserTel.text;
-                updata();
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen(),));
+                if (Fullname.text.isNotEmpty&&UserAddress.text.isNotEmpty&&UserTel.text.isNotEmpty) {
+                  Name = Fullname.text;
+                  Address = UserAddress.text;
+                  Tel = UserTel.text;
+                  updata();
+                  Fluttertoast.showToast(
+                            msg: "Insert Success", gravity: ToastGravity.TOP);
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return LoginScreen();
+                        }));
+                }else {
+                        Fluttertoast.showToast(
+                            msg: "โปรดกรอกข้อมูลให้ครบถ้วน",
+                            gravity: ToastGravity.TOP);
+                      }
+                // Name = Fullname.text;
+                // Address = UserAddress.text;
+                // Tel = UserTel.text;
+                // updata();
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen(),));
               },
               child: Container(
                 width: 400,

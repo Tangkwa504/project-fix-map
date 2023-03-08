@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../firebase.dart';
 import '../firebase_options.dart';
 import '../first_page.dart';
+import '../login/login_screen.dart';
+import '../widgets/alertdialog.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -17,10 +20,11 @@ class ProfilePage extends StatefulWidget {
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
-List<Info> list = [];
+List users = [];
 
 class _ProfilePageState extends State<ProfilePage> {
     @override
+    DatabaseReference starCountRef = FirebaseDatabase.instance.ref('User');
   void initState() {
     // TODO: implement initState
     initfirebase();
@@ -28,6 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
   @override
   Widget build(BuildContext context) {
+    readfirebase();
     return Container(
       height: double.maxFinite,
       width: double.maxFinite,
@@ -87,9 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     const SizedBox(height: 80),
                         InkWell(
-              onTap: () {
-                
-                checkuser();
+              onTap: () {                
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstPage(),));
               },
               child: Container(
@@ -109,8 +112,15 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 30),
                     InkWell(
-              onTap: () {
+              onTap: () async {
+                 final action = await AlertDialogs.yesCancleDialog(
+                  context, 'Logout', 'คุณยืนยันที่จะออกจากระบบหรือไม่ ?');
+              if (action == DialogAction.Yes) {
+                Fluttertoast.showToast(
+                      msg: "Logout Success", gravity: ToastGravity.TOP,
+                      backgroundColor: Color.fromARGB(255, 243, 16, 72));
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstPage(),));
+              };
               },
               child: Container(
                 width: 200,
@@ -154,21 +164,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
     );
   }
-}
-
-void checkuser() {
-  
-  print("Testcheck");
-  //print(password);
-}
-
-  void initfirebase() async {
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
-
-  }
-
-  void readfirebase(user, password,context) async {
+    void readfirebase() async {
     DatabaseReference starCountRef = FirebaseDatabase.instance.ref('User');
     starCountRef.onValue.listen((DatabaseEvent event) {
       final data = event.snapshot.value;
@@ -177,16 +173,8 @@ void checkuser() {
       list = [];
       map.forEach(
         (key, value) {
-          print(key);
-          // if(user==value["Email"]){
-          //   if(password==value["Password"]){
-          //     print("mail");
-          //   }else{
-          //     print("errorpass");
-          //   }
-          // }else{
-          //   print("error");
-          // }
+          Text(value["name"]);
+          //print(key);     
         },
       );
       list.forEach((element) {
@@ -194,3 +182,13 @@ void checkuser() {
       });
     });
   }
+}
+
+
+  void initfirebase() async {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+
+  }
+
+

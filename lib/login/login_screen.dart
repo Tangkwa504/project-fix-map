@@ -10,6 +10,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../firebase_options.dart';
 
@@ -42,106 +43,108 @@ class _LoginScreenState extends State<LoginScreen> {
         width: double.infinity,
         height: double.infinity,
         padding: const EdgeInsets.all(12),
-        child: Column(
-          children:  [
-            const Text(
-                "Login",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32,
-                  color: Colors.black87,
-            ),
-            ),
-            const SizedBox(height: 12),
-            Align(alignment: Alignment.center, child: Image.asset('assets/logo.png', width: 200)),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              width: 400,
-              decoration: BoxDecoration( 
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.grey.withOpacity(0.4),
-              ),
-              child: TextField( 
-                controller: Emaillogin,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.email,
-                    color: Color.fromARGB(255, 243, 16, 72),
-                    ),
-                  hintText: "Email address",
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              width: 400,
-              decoration: BoxDecoration( 
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.grey.withOpacity(0.4),
-              ),
-              child: TextField( 
-                controller: PasswordLogin,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.lock,
-                    color: Color.fromARGB(255, 243, 16, 72),
-                    ),
-                  hintText: "Password",
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            InkWell(
-              onTap: () {
-                //print("Test");
-                checklogin(Emaillogin.text, PasswordLogin.text,context);
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(),));
-              },
-              child: Container(
-                width: 400,
-                height: 50,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration( 
-                  borderRadius: BorderRadius.circular(12),
-                  color: Color.fromARGB(255, 243, 16, 72),
-                ),
-                child: const Text( 
+        child: SingleChildScrollView(
+          child: Column(
+            children:  [
+              const Text(
                   "Login",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-                ),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
+                    color: Colors.black87,
               ),
-            ),
-            const SizedBox(height: 12),
-            Row( 
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-              "Don't have an account?",
-              style: TextStyle( 
-                color: Colors.black54,
-                ),
               ),
-              const SizedBox(width: 12),
-              GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: ((context) => const singupmix()))); 
-                },
-                child: const Text(
-                  "Signup",
-                  style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              const SizedBox(height: 12),
+              Align(alignment: Alignment.center, child: Image.asset('assets/logo.png', width: 200)),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                width: 400,
+                decoration: BoxDecoration( 
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.withOpacity(0.4),
+                ),
+                child: TextField( 
+                  controller: Emaillogin,
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.email,
+                      color: Color.fromARGB(255, 243, 16, 72),
+                      ),
+                    hintText: "Email address",
+                    border: InputBorder.none,
                   ),
+                ),
               ),
-              ],
-            ),
-            
-          ],
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                width: 400,
+                decoration: BoxDecoration( 
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.withOpacity(0.4),
+                ),
+                child: TextField( 
+                  controller: PasswordLogin,
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.lock,
+                      color: Color.fromARGB(255, 243, 16, 72),
+                      ),
+                    hintText: "Password",
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              InkWell(
+                onTap: () {
+                  //print("Test");
+                  checklogin(Emaillogin.text, PasswordLogin.text,context);
+                  //Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(),));
+                },
+                child: Container(
+                  width: 400,
+                  height: 50,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration( 
+                    borderRadius: BorderRadius.circular(12),
+                    color: Color.fromARGB(255, 243, 16, 72),
+                  ),
+                  child: const Text( 
+                    "Login",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row( 
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                "Don't have an account?",
+                style: TextStyle( 
+                  color: Colors.black54,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: ((context) => const singupmix()))); 
+                  },
+                  child: const Text(
+                    "Signup",
+                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                    ),
+                ),
+                ],
+              ),
+              
+            ],
+          ),
         ),
       ),
     );
@@ -172,14 +175,24 @@ void checklogin(String user,String password,context) {
       map.forEach(
         (key, value) {
           //print(key);
-          if(user==value["Email"]){
-            if(password==value["Password"]){
+          if(user==value["Email"]){  //เช็คเมล userlogin
+            if(password==value["Password"]){  //เช็ค pass userlogin
+            Fluttertoast.showToast(
+                      msg: "ยินดีต้อนรับคุณ "+ value["Name"]+" เข้าสู่ระบบ", gravity: ToastGravity.TOP,
+                      backgroundColor: Colors.green
+                      );
               Navigator.push(context, MaterialPageRoute(builder: ((context) => const HomeScreen())));
             }else{
               print("errorpass");
+              Fluttertoast.showToast(
+                      msg: "รหัสผ่านไม่ถูกต้อง", gravity: ToastGravity.TOP,
+                      backgroundColor: Color.fromARGB(255, 243, 16, 72));
             }
           }else{
             print("error");
+            // Fluttertoast.showToast(
+            //           msg: "ชื่อผู้ใช้และรหัสผ่านไม่ถูกต้อง", gravity: ToastGravity.TOP,
+            //           backgroundColor: Color.fromARGB(255, 243, 16, 72));
           }
         },
       );
