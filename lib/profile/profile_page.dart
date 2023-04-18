@@ -32,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
   @override
   Widget build(BuildContext context) {
-    readfirebase();
+    // readfirebase();
     return Container(
       height: double.maxFinite,
       width: double.maxFinite,
@@ -117,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   context, 'Logout', 'คุณยืนยันที่จะออกจากระบบหรือไม่ ?');
               if (action == DialogAction.Yes) {
                 Fluttertoast.showToast(
-                      msg: "Logout Success", gravity: ToastGravity.TOP,
+                      msg: "ออกจากระบบเสร็จสิ้น", gravity: ToastGravity.TOP,
                       backgroundColor: Color.fromARGB(255, 243, 16, 72));
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstPage(),));
               };
@@ -164,24 +164,26 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
     );
   }
-    void readfirebase() async {
-    DatabaseReference starCountRef = FirebaseDatabase.instance.ref('User');
-    starCountRef.onValue.listen((DatabaseEvent event) {
-      final data = event.snapshot.value;
-      Map<String, dynamic> map = json.decode(json.encode(data));
-      print(map);
-      list = [];
-      map.forEach(
-        (key, value) {
-          Text(value["name"]);
-          //print(key);     
-        },
-      );
-      list.forEach((element) {
-        print("$element");
-      });
-    });
-  }
+  //   void readfirebase() async {
+  //   DatabaseReference starCountRef = FirebaseDatabase.instance.ref('User');
+  //   starCountRef.onValue.listen((DatabaseEvent event) {
+  //     final data = event.snapshot.value;
+  //     Map<String, dynamic> map = json.decode(json.encode(data));
+  //     print(map);
+  //     list = [];
+  //     map.forEach(
+  //       (key, value) {
+  //         Text(value["name"]);
+  //         print(value);     
+
+  //         print("value ${ value }");
+  //       },
+  //     );
+  //     list.forEach((element) {
+  //       print("$element");
+  //     });
+  //   });
+  // }
 }
 
 
@@ -190,5 +192,4 @@ class _ProfilePageState extends State<ProfilePage> {
         options: DefaultFirebaseOptions.currentPlatform);
 
   }
-
 

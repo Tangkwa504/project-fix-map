@@ -10,10 +10,53 @@ class MapsPage extends StatefulWidget {
 class _MapsPageState extends State<MapsPage> {
   late Position userLocation;
   late GoogleMapController mapController;
+  List<Marker> _markers = [];
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
+
+void _addMarker(double lat, double lng, String title, String snippet, void Function(Marker) onTap) {
+  setState(() {
+    _markers.add(
+      Marker(
+        markerId: MarkerId(_markers.length.toString()),
+        position: LatLng(lat, lng),
+        infoWindow: InfoWindow(title: title, snippet: snippet),
+        onTap: () => onTap(Marker(
+          markerId: MarkerId(_markers.length.toString()),
+          position: LatLng(lat, lng),
+          infoWindow: InfoWindow(title: title, snippet: snippet),
+        )),
+      ),
+    );
+  });
+}
+void _onMarkerTapped(Marker marker) {
+  showModalBottomSheet(
+    context: context,
+    builder: (builder) {
+      return Container(
+        height: 200.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(marker.infoWindow.title!),
+            ElevatedButton(
+              onPressed: () {
+                // ดำเนินการเมื่อกดปุ่ม
+              },
+              child: Text('ดูรายละเอียด'),
+            )
+          ],
+        ),
+      );
+    },
+  );
+}
+ void _onMapCreated(GoogleMapController controller) {
+  mapController = controller;
+  _addMarker(userLocation.latitude, userLocation.longitude, 'ตำแหน่งของคุณ', '', (marker) {
+    _onMarkerTapped(marker);
+  });
+}
 
   Future<Position> _getLocation() async {
     bool serviceEnabled;

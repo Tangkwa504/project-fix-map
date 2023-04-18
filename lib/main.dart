@@ -3,6 +3,7 @@ import 'package:app_first/first_page.dart';
 import 'package:app_first/login/login_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'chatmockup.dart';
 import 'login/login_test.dart';
 
 void main() {

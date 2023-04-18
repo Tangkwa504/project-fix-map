@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter/cupertino.dart';
 import 'package:app_first/login/singupmix_screen.dart';
 import 'package:app_first/menu/home_page.dart';
 import 'package:app_first/menu/home_screen.dart';
@@ -11,8 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+
 
 import '../firebase_options.dart';
+import '../system/cookise.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -164,7 +168,19 @@ void checklogin(String user,String password,context) {
         options: DefaultFirebaseOptions.currentPlatform);
     
   }
-
+//  void readfirebase(user,password,context) async{
+//   DatabaseReference starCountRef = FirebaseDatabase.instance.ref('User');
+//   user
+//       .where('user', isEqualTo: user)
+//       .where('password', isEqualTo: password)
+//       .get()
+//       .then((QuerySnapshot querySnapshot) => querySnapshot.docs.forEach((val) {
+//             print(val['id']);
+//             print(val['user']);
+//             print(val['name']);
+//             cookieset(val['id'], val['user'], val['name']);
+//           }));
+//  }
  void readfirebase(user, password,context) async {
     DatabaseReference starCountRef = FirebaseDatabase.instance.ref('User');
     starCountRef.onValue.listen((DatabaseEvent event) {
@@ -211,3 +227,4 @@ void checklogin(String user,String password,context) {
       required this.Password,
       });
 }
+
