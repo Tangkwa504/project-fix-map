@@ -1,12 +1,13 @@
 import 'package:app_first/menu/home_screen.dart';
 import 'package:app_first/first_page.dart';
 import 'package:app_first/login/login_screen.dart';
+import 'package:app_first/widgets/Service.dart';
 import 'package:flutter/material.dart';
 
 import 'chatmockup.dart';
 import 'login/login_test.dart';
 
-void main() {
+void main() { 
   runApp(const MyApp());
 }
 
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+     appservice.email = "1"; // คำสั่งกำหนดค่าให้ตัวแปรที่จะเก็บเข้า Service
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,

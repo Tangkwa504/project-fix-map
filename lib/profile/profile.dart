@@ -53,7 +53,7 @@ class _ProfileState extends State<Profile> {
             const SizedBox(height: 80),
                         InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(),));
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(),));
               },
               child: Container(
                 width: 200,

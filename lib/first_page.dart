@@ -89,7 +89,7 @@ class FirstPage extends StatelessWidget {
               const SizedBox(height: 12),
               InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(),));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(id: 'guset',),));
                 },
                 child: Container(
                   width: 200,

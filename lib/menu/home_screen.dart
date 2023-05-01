@@ -1,3 +1,4 @@
+import 'package:app_first/login/singupmix_screen.dart';
 import 'package:app_first/profile/profile.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,7 @@ import '../map/map.dart';
 import '../profile/profile_page.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String id;   HomeScreen({required this.id, Key? key})       : super(key: ValueKey<String>(id));
 
   @override
   State<StatefulWidget> createState() => _HomeScreenState();
@@ -18,9 +19,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState
     extends State<HomeScreen> {
   int _currentTabIndex = 0;
-
   @override
   Widget build(BuildContext context) {
+    String b = "${widget.id}";
     final _kTabPages = <Widget>[
       const HomePage(),
 
@@ -29,7 +30,7 @@ class _HomeScreenState
 
       const MyApp(),
       ShoppingCart(),
-      const ProfilePage(),
+      ProfilePage(id:b),
     ];
     final _kBottmonNavBarItems = <BottomNavigationBarItem>[
       const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'หน้าหลัก'),

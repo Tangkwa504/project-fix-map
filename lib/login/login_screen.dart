@@ -16,7 +16,9 @@ import 'package:firebase_core/firebase_core.dart';
 
 
 import '../firebase_options.dart';
+import '../profile/profile_page.dart';
 import '../system/cookise.dart';
+import '../widgets/Service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,6 +28,7 @@ class LoginScreen extends StatefulWidget {
 }
   List<Info> list = [];
 class _LoginScreenState extends State<LoginScreen> {
+
 
   TextEditingController Emaillogin = TextEditingController();
   TextEditingController PasswordLogin = TextEditingController();
@@ -69,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.grey.withOpacity(0.4),
                 ),
                 child: TextField( 
-                  controller: Emaillogin,
+                  controller: Emaillogin,//appservice.Emaillogin,
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
@@ -106,6 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
               InkWell(
                 onTap: () {
                   //print("Test");
+                  
                   checklogin(Emaillogin.text, PasswordLogin.text,context);
                   //Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(),));
                 },
@@ -156,9 +160,9 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 
-void checklogin(String user,String password,context) {
+void checklogin(String user ,String password,context) {
   
-  readfirebase(user ,password,context);
+  readfirebase(user,password,context);
   //print(user);
   //print(password);
 }
@@ -181,7 +185,8 @@ void checklogin(String user,String password,context) {
 //             cookieset(val['id'], val['user'], val['name']);
 //           }));
 //  }
- void readfirebase(user, password,context) async {
+ void readfirebase(user,password,context) async {
+    //String user = appservice.Emaillogin.text; //กำหนดตัวแปล user แล้วให้เชื่อมกับ appservice แล้วรับค่ามาจากผู้ใช้ก็คือ .Emaillogin.text
     DatabaseReference starCountRef = FirebaseDatabase.instance.ref('User');
     starCountRef.onValue.listen((DatabaseEvent event) {
       final data = event.snapshot.value;
@@ -197,12 +202,15 @@ void checklogin(String user,String password,context) {
                       msg: "ยินดีต้อนรับคุณ "+ value["Name"]+" เข้าสู่ระบบ", gravity: ToastGravity.TOP,
                       backgroundColor: Colors.green
                       );
-              Navigator.push(context, MaterialPageRoute(builder: ((context) => const HomeScreen())));
+              String pushemail = user;
+              appservice.email = "1";
+              Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen(id: pushemail),),);
+              // Navigator.push(context, MaterialPageRoute(builder: ((context) => const HomeScreen())));
             }else{
               print("errorpass");
-              Fluttertoast.showToast(
-                      msg: "รหัสผ่านไม่ถูกต้อง", gravity: ToastGravity.TOP,
-                      backgroundColor: Color.fromARGB(255, 243, 16, 72));
+              // Fluttertoast.showToast(
+              //         msg: "รหัสผ่านไม่ถูกต้อง", gravity: ToastGravity.TOP,
+              //         backgroundColor: Color.fromARGB(255, 243, 16, 72));
             }
           }else{
             print("error");
