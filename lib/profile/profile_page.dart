@@ -10,6 +10,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 import '../firebase.dart';
 import '../firebase_options.dart';
@@ -18,7 +19,7 @@ import '../login/login_screen.dart';
 import '../widgets/alertdialog.dart';
 
 class ProfilePage extends StatefulWidget {
-  final String id;
+  String id;
   ProfilePage({required this.id, Key? key}) : super(key: ValueKey<String>(id));
 
   @override
@@ -26,6 +27,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 List users = [];
+String? url;
 
 class _ProfilePageState extends State<ProfilePage> {
   @override
@@ -34,11 +36,23 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     // TODO: implement initState
     initfirebase();
+    setimg();
     super.initState();
   }
+  void setimg() async{
+     ProviderSer profileService =
+        Provider.of<ProviderSer>(context, listen: false);
+       url = await profileService.getProfileImageUrl();
+      setState(() {
+        
+      });
+  }
+  
 
   @override
   Widget build(BuildContext context) {
+    ProviderSer profileService =
+        Provider.of<ProviderSer>(context, listen: true);
     // readfirebase();
     return Container(
       height: double.maxFinite,
@@ -160,7 +174,12 @@ class _ProfilePageState extends State<ProfilePage> {
                               gravity: ToastGravity.TOP,
                               backgroundColor:
                                   Color.fromARGB(255, 243, 16, 72));
-                          Navigator.push(
+                                  profileService.logout();
+                                  setState(() {
+                                    url = null;
+                                    widget.id = "";
+                                  });
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const FirstPage(),
@@ -199,7 +218,8 @@ class _ProfilePageState extends State<ProfilePage> {
             left: MediaQuery.of(context).size.width / 2 - 75,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(75),
-              child: Image.asset(
+              child: url != null ? Image.network(url!, height: 150,
+                width: 150,) : Image.asset(
                 "assets/profile.png",
                 height: 150,
                 width: 150,

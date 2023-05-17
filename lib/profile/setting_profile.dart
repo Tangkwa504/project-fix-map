@@ -11,8 +11,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../firebase_options.dart';
+import '../login/login_screen.dart';
 import '../widgets/Service.dart';
-import 'login_screen.dart';
+
 
 //ตั้งชื่อตัวแปรต่างๆที่จะนำไปใช้
 String Email = "";
@@ -22,14 +23,14 @@ String Address = "";
 String Tel = "";
 String Password2 = "";
 
-class singupmix extends StatefulWidget {
-  const singupmix({super.key});
+class settingprofile extends StatefulWidget {
+  const settingprofile({super.key});
 
   @override
-  State<singupmix> createState() => _singupmixState();
+  State<settingprofile> createState() => _settingprofileState();
 }
 
-class _singupmixState extends State<singupmix> {
+class _settingprofileState extends State<settingprofile> {
   TextEditingController Emailinput =
       TextEditingController(); // ตั้งค่าชื่อตัวแปรที่รับจากผู้ใช้
   TextEditingController UserPass = TextEditingController();
@@ -77,7 +78,7 @@ class _singupmixState extends State<singupmix> {
         child: Column(
           children: [
             const Text(
-              "Register",
+              "Setting Profile",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 32,
@@ -162,7 +163,7 @@ class _singupmixState extends State<singupmix> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const singupmix2(),
+                        builder: (context) => const settingprofile2(),
                       ));
                 } else if (UserPass.text != Checkpass.text) {
                   Fluttertoast.showToast(
@@ -174,7 +175,7 @@ class _singupmixState extends State<singupmix> {
                 }
                 // Email = Emailinput.text;
                 // Password = UserPass.text;
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => const singupmix2(),));
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const settingprofile2(),));
               },
               child: Container(
                 width: 400,
@@ -227,14 +228,14 @@ class _singupmixState extends State<singupmix> {
   }
 }
 
-class singupmix2 extends StatefulWidget {
-  const singupmix2({super.key});
+class settingprofile2 extends StatefulWidget {
+  const settingprofile2({super.key});
 
   @override
-  State<singupmix2> createState() => _singupmix2State();
+  State<settingprofile2> createState() => _settingprofile2State();
 }
 
-class _singupmix2State extends State<singupmix2> {
+class _settingprofile2State extends State<settingprofile2> {
   TextEditingController Fullname = TextEditingController();
   TextEditingController UserAddress = TextEditingController();
   TextEditingController UserTel = TextEditingController();

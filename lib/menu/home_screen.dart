@@ -21,7 +21,7 @@ class _HomeScreenState
   int _currentTabIndex = 0;
   @override
   Widget build(BuildContext context) {
-    String b = "${widget.id}";
+    String email = "${widget.id}";
     final _kTabPages = <Widget>[
       const HomePage(),
 
@@ -30,7 +30,7 @@ class _HomeScreenState
 
       const MyApp(),
       ShoppingCart(),
-      ProfilePage(id:b),
+      ProfilePage(id:email),
     ];
     final _kBottmonNavBarItems = <BottomNavigationBarItem>[
       const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'หน้าหลัก'),

@@ -12,6 +12,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -187,6 +188,8 @@ void checklogin(String user ,String password,context) {
 //  }
  void readfirebase(user,password,context) async {
     //String user = appservice.Emaillogin.text; //กำหนดตัวแปล user แล้วให้เชื่อมกับ appservice แล้วรับค่ามาจากผู้ใช้ก็คือ .Emaillogin.text
+    ProviderSer profileService =
+        Provider.of<ProviderSer>(context, listen: false);
     DatabaseReference starCountRef = FirebaseDatabase.instance.ref('User');
     starCountRef.onValue.listen((DatabaseEvent event) {
       final data = event.snapshot.value;
@@ -204,6 +207,7 @@ void checklogin(String user ,String password,context) {
                       );
               String pushemail = user;
               appservice.email = "1";
+              profileService.setemail(user);
               Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen(id: pushemail),),);
               // Navigator.push(context, MaterialPageRoute(builder: ((context) => const HomeScreen())));
             }else{
