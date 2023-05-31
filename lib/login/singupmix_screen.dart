@@ -426,6 +426,7 @@ void writefirebase(ProviderSer provider) async {
   });
   provider.setemail(Email);
   provider.uploadImages();
+  provider.createcol(Email);
 }
 
 void updata(ProviderSer provider) {

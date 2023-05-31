@@ -2,6 +2,7 @@ import 'package:app_first/login/singupmix_screen.dart';
 import 'package:app_first/profile/profile.dart';
 import 'package:flutter/material.dart';
 
+import '../Products/Cart.dart';
 import '../Shoppingcart.dart';
 import '../chat.dart';
 import '../firebase.dart';
@@ -29,7 +30,7 @@ class _HomeScreenState
 
 
       const MyApp(),
-      ShoppingCart(),
+      CartScreen(),
       ProfilePage(id:email),
     ];
     final _kBottmonNavBarItems = <BottomNavigationBarItem>[

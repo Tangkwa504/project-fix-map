@@ -49,11 +49,12 @@ class _ProfilePageState extends State<ProfilePage> {
       });
   }
   
-
   @override
   Widget build(BuildContext context) {
     ProviderSer profileService =
         Provider.of<ProviderSer>(context, listen: true);
+       final cartService = Provider.of<CartProvider>(context, listen: true);
+       final productService = Provider.of<ProductProvider>(context, listen: true);
     // readfirebase();
     return Container(
       height: double.maxFinite,
@@ -176,6 +177,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               backgroundColor:
                                   Color.fromARGB(255, 243, 16, 72));
                                   profileService.logout();
+                                  productService.logout();
+                                  cartService.logout();                                  
                                   setState(() {
                                     url = null;
                                     widget.id = "";

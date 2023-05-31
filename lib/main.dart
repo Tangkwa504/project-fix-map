@@ -25,7 +25,9 @@ class MyApp extends StatelessWidget {
      appservice.email = "1"; // คำสั่งกำหนดค่าให้ตัวแปรที่จะเก็บเข้า Service
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create:(_) => ProviderSer())
+        ChangeNotifierProvider(create:(_) => ProviderSer()),
+        ChangeNotifierProvider(create:(_) => ProductProvider()),
+        ChangeNotifierProvider(create:(_) => CartProvider())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

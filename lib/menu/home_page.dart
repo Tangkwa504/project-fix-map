@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../Products/Productspage.dart';
 import '../Role_pharmacy/shopprofile.dart';
 import '../login/login_screen.dart';
 import '../map/map.dart';
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Bottonhome(title: "QRCODE",page: Shopprofile(),icon: Icons.qr_code),
+                Bottonhome(title: "QRCODE",page: ProductsPage(),icon: Icons.qr_code),
                 Bottonhome(title: "ประวัติสนทนา",page: LoginScreen(),icon: Icons.chat),
               ],
             ),
