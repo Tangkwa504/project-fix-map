@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app_first/login/singupmix_screen.dart';
+import 'package:app_first/profile/setting_profile.dart';
 import 'package:app_first/widgets/Service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -141,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 10),
                     InkWell(
                       onTap: () {
-                        // Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstPage(),));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const settingprofile(),));
                       },
                       child: Container(
                         width: 200,
@@ -219,7 +220,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(75),
               child: url != null ? Image.network(url!, height: 150,
-                width: 150,) : Image.asset(
+                width: 150, fit: BoxFit.cover,) : Image.asset(
                 "assets/profile.png",
                 height: 150,
                 width: 150,

@@ -198,9 +198,9 @@ void checklogin(String user ,String password,context) {
       list = [];
       map.forEach(
         (key, value) {
-          //print(key);
           if(user==value["Email"]){  //เช็คเมล userlogin
             if(password==value["Password"]){  //เช็ค pass userlogin
+            print(key);
             Fluttertoast.showToast(
                       msg: "ยินดีต้อนรับคุณ "+ value["Name"]+" เข้าสู่ระบบ", gravity: ToastGravity.TOP,
                       backgroundColor: Colors.green
@@ -208,6 +208,8 @@ void checklogin(String user ,String password,context) {
               String pushemail = user;
               appservice.email = "1";
               profileService.setemail(user);
+              profileService.setkey(key);
+              profileService.setuser(value["Name"],value["Password"],value["Address"],value["Tel"]);
               Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen(id: pushemail),),);
               // Navigator.push(context, MaterialPageRoute(builder: ((context) => const HomeScreen())));
             }else{
