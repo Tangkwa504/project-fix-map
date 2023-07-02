@@ -84,6 +84,13 @@ void _onMarkerTapped(Marker marker) {
     return userLocation;
   }
 
+
+  List<Marker> marker = [Marker(markerId: MarkerId("12345"),infoWindow:InfoWindow(title: "ซอยบ้าน",onTap: () {
+                  print("Testmapp");
+                },) ,position: LatLng(13.852831496654964, 100.51482900312834)),
+                Marker(markerId: MarkerId("54321"),infoWindow:InfoWindow(title: "ซอยบ้าน2",onTap: () {
+                  print("Testmapp2");
+                },) ,position: LatLng(13.852831496654964, 100.56482900312834))];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,6 +102,7 @@ void _onMarkerTapped(Marker marker) {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return GoogleMap(
+              markers: marker.toSet(),
               mapType: MapType.normal,
               onMapCreated: _onMapCreated,
               myLocationEnabled: true,

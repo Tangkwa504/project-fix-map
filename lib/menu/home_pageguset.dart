@@ -7,18 +7,19 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import '../Products/Productspage.dart';
+import '../Role_guest/bottomhomeguest.dart';
 import '../Role_pharmacy/shopprofile.dart';
 import '../login/login_screen.dart';
 import '../map/map.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePageguest extends StatefulWidget {
+  const HomePageguest({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePageguest> createState() => _HomePageguestState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageguestState extends State<HomePageguest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +39,7 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Bottonhome(title: "ค้นหาอัตโนมัติ",page: Shopprofile(),icon: Icons.refresh),
+                Bottonhomeguest(title: "ค้นหาอัตโนมัติ",page: Shopprofile(),icon: Icons.refresh),
                 Bottonhome(title: "ค้นหาร้านยา",page: MapsPage(),icon: Icons.pin_drop),
               ],
             ),
@@ -46,8 +47,8 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Bottonhome(title: "QRCODE",page: ProductsPage(),icon: Icons.qr_code),
-                Bottonhome(title: "ประวัติสนทนา",page: LoginScreen(),icon: Icons.chat),
+                Bottonhomeguest(title: "QRCODE",page: ProductsPage(),icon: Icons.qr_code),
+                Bottonhomeguest(title: "ประวัติสนทนา",page: LoginScreen(),icon: Icons.chat),
               ],
             ),
           ],

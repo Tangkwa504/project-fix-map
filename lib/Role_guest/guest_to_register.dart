@@ -6,11 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-import 'login/singup_pharmacy.dart';
-import 'menu/home_screenguest.dart';
 
-class FirstPage extends StatelessWidget {
-  const FirstPage({super.key});
+
+class forceregister extends StatelessWidget {
+  const forceregister({super.key});
   
 
   @override
@@ -32,22 +31,22 @@ class FirstPage extends StatelessWidget {
               Align(alignment: Alignment.center, child: Image.asset('assets/logo.png', width: 230)),
               const SizedBox(height: 12),
               const Text(
-                  "Pharmacy" ,
+                  "ระบบนี้ต้องมีบัญชีในการเข้าถึง" ,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 44,
+                    fontSize: 26,
                     color: Colors.black87,
               ),
               ),
               const Text(
-                  "Online" ,
+                  "กรุณาเข้าสู่ระบบก่อนการใช้งาน" ,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 44,
+                    fontSize: 22,
                     color: Colors.black87,
               ),
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 20),
               
               InkWell(
                 onTap: () {
@@ -63,53 +62,34 @@ class FirstPage extends StatelessWidget {
                     color: Color.fromARGB(255, 64, 103, 211),
                   ),
                   child: const Text( 
-                    "LOGIN",
+                    "เข้าสู่ระบบ",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                     
                   ),
                 ),
               ),
               const SizedBox(height: 12),
-              InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const singupmixpharmacy(),));
-                },
-                child: Container(
-                  width: 200,
-                  height: 50,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration( 
-                    borderRadius: BorderRadius.circular(12),
-                    color: Color.fromARGB(255, 243, 16, 72),
-                  ),
-                  child: const Text( 
-                    "REGISTER",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+              Row( 
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                "หากคุณยังไม่มีบัญชี?",
+                style: TextStyle( 
+                  color: Colors.black54,
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreenguest(id: 'guset',),));
-                },
-                child: Container(
-                  width: 200,
-                  height: 50,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration( 
-                    borderRadius: BorderRadius.circular(12),
-                    color: Color.fromARGB(255, 131, 126, 127),
-                  ),
-                  child: const Text( 
-                    "CONTINUE AS GUEST",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
+                const SizedBox(width: 12),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: ((context) => const singupmix()))); 
+                  },
+                  child: const Text(
+                    "สมัครสมาชิก",
+                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                    ),
                 ),
+                ],
               ),
-              const SizedBox(height: 12),
             ],
           ),
         ),

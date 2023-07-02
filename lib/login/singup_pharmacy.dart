@@ -18,20 +18,23 @@ import 'login_screen.dart';
 String Email = "";
 String Password = "";
 String Name = "";
-String Address = "";
+String Licensepharmacy = "";
 String Tel = "";
 String Password2 = "";
+String Nameshop = "";
+String Addressshop = "";
+String Timeopening = "";
+String Timeclosing = "";
 
-class singupmix extends StatefulWidget {
-  const singupmix({super.key});
+class singupmixpharmacy extends StatefulWidget {
+  const singupmixpharmacy({super.key});
 
   @override
-  State<singupmix> createState() => _singupmixState();
+  State<singupmixpharmacy> createState() => _singupmixpharmacyState();
 }
 
-class _singupmixState extends State<singupmix> {
-  TextEditingController Emailinput =
-      TextEditingController(); // ตั้งค่าชื่อตัวแปรที่รับจากผู้ใช้
+class _singupmixpharmacyState extends State<singupmixpharmacy> {
+  TextEditingController Emailinput = TextEditingController(); // ตั้งค่าชื่อตัวแปรที่รับจากผู้ใช้
   TextEditingController UserPass = TextEditingController();
   TextEditingController Checkpass = TextEditingController();
   ImagePicker _picker = ImagePicker();
@@ -97,8 +100,8 @@ class _singupmixState extends State<singupmix> {
               child: Align(
                   alignment: Alignment.center,
                   child: profiletestService.imagesFile2 != null
-                      ? Image.file(profiletestService.imagesFile2!, width: 200)
-                      : Image.asset('assets/addphoto.png', width: 200)),
+                      ? Image.file(profiletestService.imagesFile2!, width: 200, height: 220)
+                      : Image.asset('assets/addphoto.png', width: 200, height: 220)),
             ),
             const SizedBox(height: 12),
             Container(
@@ -235,14 +238,13 @@ class singupmix2 extends StatefulWidget {
   State<singupmix2> createState() => _singupmix2State();
 }
  
- enum SingingCharacter { pharmacy, user } //enum เป็นตัวแปลคล้ายๆบูลีน
+//enum เป็นตัวแปลคล้ายๆบูลีน
 class _singupmix2State extends State<singupmix2> {
   TextEditingController Fullname = TextEditingController();
-  TextEditingController UserAddress = TextEditingController();
+  TextEditingController Pharmacylicense = TextEditingController();
   TextEditingController UserTel = TextEditingController();
   
   
-  SingingCharacter? _character = SingingCharacter.user; //เรียกใช้ enum
 
   @override
   void initState() {
@@ -306,10 +308,10 @@ class _singupmix2State extends State<singupmix2> {
                 color: Colors.grey.withOpacity(0.4),
               ),
               child: TextField(
-                controller: UserAddress,
+                controller: Pharmacylicense,
                 textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
-                  hintText: "Address",
+                  hintText: "Pharmacylicense",
                   border: InputBorder.none,
                 ),
               ),
@@ -335,18 +337,17 @@ class _singupmix2State extends State<singupmix2> {
             InkWell(
               onTap: () {
                 if (Fullname.text.isNotEmpty &&
-                    UserAddress.text.isNotEmpty &&
+                    Pharmacylicense.text.isNotEmpty &&
                     UserTel.text.isNotEmpty) {
                   Name = Fullname.text;
-                  Address = UserAddress.text;
+                  Licensepharmacy = Pharmacylicense.text;
                   Tel = UserTel.text;
-                  updata(profileService);
-                  Fluttertoast.showToast(
-                      msg: "Insert Success", gravity: ToastGravity.TOP);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                    return LoginScreen();
-                  }));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const singupmix3(),
+                      ));
+
                 } else {
                   Fluttertoast.showToast(
                       msg: "โปรดกรอกข้อมูลให้ครบถ้วน",
@@ -358,7 +359,7 @@ class _singupmix2State extends State<singupmix2> {
                 // updata();
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen(),));
               },
-              child: Container(
+                child: Container(
                 width: 400,
                 height: 50,
                 alignment: Alignment.center,
@@ -368,7 +369,7 @@ class _singupmix2State extends State<singupmix2> {
                   color: Color.fromARGB(255, 243, 16, 72),
                 ),
                 child: const Text(
-                  "REGISTER",
+                  "NEXT",
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -409,6 +410,222 @@ class _singupmix2State extends State<singupmix2> {
   }
 }
 
+class singupmix3 extends StatefulWidget {
+  const singupmix3({super.key});
+
+  @override
+  State<singupmix3> createState() => _singupmix3State();
+}
+ 
+//enum เป็นตัวแปลคล้ายๆบูลีน
+class _singupmix3State extends State<singupmix3> {
+  TextEditingController Shopname = TextEditingController();
+  TextEditingController Shopaddress = TextEditingController();
+  TextEditingController Openingtime = TextEditingController();
+  TextEditingController Closingtime = TextEditingController();
+    ImagePicker _picker = ImagePicker();
+    ImagePicker _pickershop = ImagePicker();
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    print("test");
+    if (pickedFile != null) {
+      List<File> images = [];
+      File imageFile = File(pickedFile.path);
+      images.add(imageFile);
+      ProviderSer profileService =
+          Provider.of<ProviderSer>(context, listen: false);
+      profileService.addFile(images);
+    }
+  }
+  Future<void> _pickImageshop() async {
+    final pickedFile = await _pickershop.pickImage(source: ImageSource.gallery);
+    print("test");
+    if (pickedFile != null) {
+      List<File> images = [];
+      File imageFile = File(pickedFile.path);
+      images.add(imageFile);
+      ProviderSer profileService =
+          Provider.of<ProviderSer>(context, listen: false);
+      profileService.addFileshop(images);
+    }
+  }
+  
+  
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    initfirebase();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ProviderSer profileService =
+        Provider.of<ProviderSer>(context, listen: true);
+        
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        leading: const BackButton(color: Colors.black87),
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+      ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          //crossAxisAlignment: CrossAxisAlignment.start,
+
+          children: [
+            const Text(
+              "Shop Detail",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 32,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 12),
+            // Align(alignment: Alignment.center, child: Image.asset('assets/logo.png', width: 200)),
+            const SizedBox(height: 12),
+            InkWell(
+              onTap: () async {
+                print(profileService.imagesFile2shop != null);
+                await _pickImageshop();
+                setState(() {
+                
+              });
+              },
+              child: Align(
+                  alignment: Alignment.center,
+                  child: profileService.imagesFile2shop != null
+                      ? Image.file(profileService.imagesFile2shop!, width: 200, height: 220)
+                      : Image.asset('assets/addphoto.png', width: 200, height: 220)),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              width: 400,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.grey.withOpacity(0.4),
+              ),
+              child: TextField(
+                controller: Shopname,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  hintText: "Shopname",
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              width: 400,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.grey.withOpacity(0.4),
+              ),
+              child: TextField(
+                controller: Shopaddress,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  hintText: "Shopaddress",
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              width: 400,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.grey.withOpacity(0.4),
+              ),
+              child: TextField(
+                controller: Openingtime,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  hintText: "Openingtime",
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              width: 400,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.grey.withOpacity(0.4),
+              ),
+              child: TextField(
+                controller: Closingtime,
+                textAlignVertical: TextAlignVertical.center,
+                decoration: InputDecoration(
+                  hintText: "Closingtime",
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            InkWell(
+              onTap: () {
+                if (Shopname.text.isNotEmpty &&
+                    Shopaddress.text.isNotEmpty &&
+                    Openingtime.text.isNotEmpty &&
+                    Closingtime.text.isNotEmpty) {
+                  Nameshop = Shopname.text;
+                  Addressshop = Shopaddress.text;
+                  Timeopening = Openingtime.text;
+                  Timeclosing = Closingtime.text;
+                  updata(profileService);
+                  Fluttertoast.showToast(
+                      msg: "Insert Success", gravity: ToastGravity.TOP);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) {
+                    return LoginScreen();
+                  }));
+                } else {
+                  Fluttertoast.showToast(
+                      msg: "โปรดกรอกข้อมูลให้ครบถ้วน",
+                      gravity: ToastGravity.TOP);
+                }
+                // Name = Fullname.text;
+                // Address = UserAddress.text;
+                // Tel = UserTel.text;
+                // updata();
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen(),));
+              },
+              child: Container(
+                width: 400,
+                height: 50,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Color.fromARGB(255, 243, 16, 72),
+                ),
+                child: const Text(
+                  "REGISTER",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 void initfirebase() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   print("initfirebase");
@@ -426,12 +643,19 @@ void writefirebase(ProviderSer provider) async {
   await ref.set({
     "Email": Email,
     "Password": Password,
-    "Address": Address,
+    "Licensepharmacy": Licensepharmacy,
     "Name": Name,
     "Tel": Tel,
+    "Nameshop" : Nameshop, 
+    "Addressshop" : Addressshop,
+    "Timeopening" : Timeopening,
+    "Timeclosing" : Timeclosing,
+
+
   });
   provider.setemail(Email);
   provider.uploadImages();
+  provider.uploadImagesshop();
   provider.createcol(Email);
 }
 

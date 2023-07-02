@@ -18,14 +18,18 @@ class Appservice {
 class ProviderSer extends ChangeNotifier {
   String reademail = "";
   List<File> imgfile = [];
+  List<File> imgfileshop = [];
   List<String> imgurl = [];
   ModelUsers user = ModelUsers(username: "", userpass: "", useraddress: "", usertel: "");
   String? url; 
   File? imgtest; 
+  File? imgtestshop; 
   final FirebaseStorage store = FirebaseStorage.instance;
   // ProviderSer(this.store);
   List<File> get imagesFile => imgfile;
   File? get imagesFile2 => imgtest;
+  List<File> get imagesFileshop => imgfileshop;
+  File? get imagesFile2shop => imgtestshop;
   ModelUsers get usermodel => user;
   String get keyuser => key;
   String key = ""; 
@@ -52,6 +56,12 @@ void addFile(List<File> images) {
     imgtest = File(images.first.path);
     notifyListeners();
   }
+  void addFileshop(List<File> images) {
+    imgfileshop.addAll(images);
+    notifyListeners();
+    imgtestshop = File(images.first.path);
+    notifyListeners();
+  }
 
 void createcol(String mail) async{
   
@@ -74,6 +84,15 @@ void createcol(String mail) async{
   }
 Future<void> deleteOldImage() async {
     final ref = store.ref('users/$reademail/image');
+    final result = await ref.listAll();
+    if (result.items.isNotEmpty) {
+      for (var element in result.items) {
+        element.delete();
+      }
+    }
+  }
+  Future<void> deleteOldImageshop() async {
+    final ref = store.ref('users/$reademail/imageshop');
     final result = await ref.listAll();
     if (result.items.isNotEmpty) {
       for (var element in result.items) {
@@ -125,6 +144,37 @@ Future<String?> getProfileImageUrl() async {
       rethrow;
     } finally {
       imgfile.clear();
+      notifyListeners();
+    }
+  }
+    Future<void> uploadImagesshop() async {
+
+    if (reademail == "") {
+      notifyListeners();
+    }
+
+    if (imgfileshop.isEmpty) {
+      notifyListeners();
+    }
+    await deleteOldImageshop();
+
+    try {
+      for (int i = 0; i < imgfileshop.length; i++) {
+        String imageName = const Uuid().v4();
+        final Reference storageRef =
+            FirebaseStorage.instance.ref('users/${reademail}/imageshop/$imageName');
+        final UploadTask uploadTask = storageRef.putFile(imgfile[i]);
+        final TaskSnapshot downloadUrl = await uploadTask.whenComplete(() {
+          print("Upload for ${reademail} with Image $imageName");
+        });
+        final String url = await downloadUrl.ref.getDownloadURL();
+        imgurl.add(url);
+      }
+    } catch (e) {
+      print(e);
+      rethrow;
+    } finally {
+      imgfileshop.clear();
       notifyListeners();
     }
   }
