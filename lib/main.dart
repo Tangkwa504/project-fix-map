@@ -27,7 +27,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create:(_) => ProviderSer()),
         ChangeNotifierProvider(create:(_) => ProductProvider()),
-        ChangeNotifierProvider(create:(_) => CartProvider())
+        ChangeNotifierProvider(create:(_) => CartProvider()),
+        ChangeNotifierProvider(create:(_) => Useridprovider()),
+        
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

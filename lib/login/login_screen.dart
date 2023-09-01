@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:app_first/model/Userid.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:app_first/login/singupmix_screen.dart';
 import 'package:app_first/menu/home_page.dart';
@@ -39,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
     initfirebase();
     super.initState();
   }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,6 +192,8 @@ void checklogin(String user ,String password,context) {
     //String user = appservice.Emaillogin.text; //กำหนดตัวแปล user แล้วให้เชื่อมกับ appservice แล้วรับค่ามาจากผู้ใช้ก็คือ .Emaillogin.text
     ProviderSer profileService =
         Provider.of<ProviderSer>(context, listen: false);
+    Useridprovider provideruserid =
+        Provider.of<Useridprovider>(context, listen: false);
     DatabaseReference starCountRef = FirebaseDatabase.instance.ref('User');
     starCountRef.onValue.listen((DatabaseEvent event) {
       final data = event.snapshot.value;
@@ -209,7 +213,10 @@ void checklogin(String user ,String password,context) {
               appservice.email = "1";
               profileService.setemail(user);
               profileService.setkey(key);
-              profileService.setuser(value["Name"],value["Password"],value["Address"],value["Tel"]);
+              //profileService.setuser(value["Name"],value["Password"],value["Addressshop"],value["Tel"]); //เช็ค login pharmacy
+              profileService.setuser(value["Name"],value["Password"],value["Address"],value["Tel"]); //เช็ค Login User 
+              provideruserid.addConfig(Userid(email: value["Email"]));
+
               Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen(id: pushemail),),);
               // Navigator.push(context, MaterialPageRoute(builder: ((context) => const HomeScreen())));
             }else{

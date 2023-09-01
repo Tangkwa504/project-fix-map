@@ -2,13 +2,16 @@ class Product {
   final String name;
   final String image;
   final double price;
+  final String date;
   int quantity;
+  
 
   Product({
     required this.name,
     required this.image,
     required this.price,
-    this.quantity = 1,
+    required this.date,
+    required this.quantity,
   });
 
   Product copyWith({
@@ -16,12 +19,14 @@ class Product {
     String? image,
     double? price,
     int? quantity,
+    String? date,
   }) {
     return Product(
       name: name ?? this.name,
       image: image ?? this.image,
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
+      date: date ?? this.date,
     );
   }
 
@@ -31,6 +36,7 @@ class Product {
       image: json['image'],
       price: json['price'].toDouble(),
       quantity: json['quantity'] ?? 1,
+      date: json['date'],
     );
   }
 
@@ -40,6 +46,7 @@ class Product {
       'image': image,
       'price': price,
       'quantity': quantity,
+      'date': date,
     };
   }
 }

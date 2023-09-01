@@ -23,6 +23,9 @@ class _AddproductState extends State<Addproduct> {
   final _picker = ImagePicker();
   String? name;
   double? price;
+  int? quantity;
+  String? date;
+
 
   void _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -50,7 +53,7 @@ class _AddproductState extends State<Addproduct> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final downloadUrl = await productProvider.uploadProfileImage(_image!,productService.reademail);
-      final product = Product(name: name!, image: downloadUrl, price: price!);
+      final product = Product(name: name!, image: downloadUrl, price: price!,quantity: quantity!,date: date!);
       productProvider.addProduct(product,productService.reademail);
 
       Navigator.pop(context);
@@ -109,7 +112,7 @@ class _AddproductState extends State<Addproduct> {
                   decoration: const InputDecoration(labelText: 'Price'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enterthe expiration date';
+                      return 'Please enter Price';
                     }
                     return null;
                   },
@@ -118,6 +121,35 @@ class _AddproductState extends State<Addproduct> {
                     price = myDouble;
                   },
                 ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: 'Quantity'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a quantity';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    quantity = int.parse(value!);
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: 'Expiration date'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the expiration date';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {                   
+                    date = value;
+                  },
+                ),
+                const SizedBox(height: 16.0),
                 const SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () {

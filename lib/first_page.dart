@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app_first/login/singupmix_screen.dart';
 import 'package:app_first/menu/home_screen.dart';
 import 'package:app_first/login/login_screen.dart';
@@ -5,14 +7,42 @@ import 'package:app_first/login/singup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
 
 import 'login/singup_pharmacy.dart';
 import 'menu/home_screenguest.dart';
+import 'widgets/Service.dart';
 
-class FirstPage extends StatelessWidget {
+class FirstPage extends StatefulWidget {
   const FirstPage({super.key});
-  
 
+  @override
+  State<FirstPage> createState() => _FirstPageState();
+}
+
+class _FirstPageState extends State<FirstPage> {
+  void initState() {
+    // TODO: implement initState
+    init();
+    Timer(Duration(seconds: 1), () {
+    checkuserid();
+  });
+    
+    super.initState();
+  }
+  void checkuserid() {
+    Useridprovider provideruserid =
+        Provider.of<Useridprovider>(context, listen: false);
+        var userid = provideruserid.getuserid();
+        int count = userid.length;
+        print("Login count = "+count.toString());
+        if(count != 0){
+          Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen(id: userid.last.email),),);
+          }        
+  }
+  void init(){
+    Provider.of<Useridprovider>(context, listen: false).init();
+  }
   @override
   Widget build(BuildContext context) {
   return Scaffold(
@@ -72,7 +102,7 @@ class FirstPage extends StatelessWidget {
               const SizedBox(height: 12),
               InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const singupmixpharmacy(),));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const singupmix(),));
                 },
                 child: Container(
                   width: 200,

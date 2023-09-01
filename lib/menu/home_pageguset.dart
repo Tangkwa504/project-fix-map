@@ -39,8 +39,8 @@ class _HomePageguestState extends State<HomePageguest> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Bottonhomeguest(title: "ค้นหาอัตโนมัติ",page: Shopprofile(),icon: Icons.refresh),
-                Bottonhome(title: "ค้นหาร้านยา",page: MapsPage(),icon: Icons.pin_drop),
+                Bottonhomeguest(title: "ค้นหาอัตโนมัติ",page: LoginScreen(),icon: Icons.refresh),
+                Bottonhome(title: "ค้นหาร้านยา",page: MapsPage(lat:"",long:"",opennow: false,),icon: Icons.pin_drop),
               ],
             ),
             const SizedBox(height: 12),

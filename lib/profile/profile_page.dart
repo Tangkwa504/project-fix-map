@@ -55,6 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Provider.of<ProviderSer>(context, listen: true);
        final cartService = Provider.of<CartProvider>(context, listen: true);
        final productService = Provider.of<ProductProvider>(context, listen: true);
+       final idprovoder = Provider.of<Useridprovider>(context, listen: true);
     // readfirebase();
     return Container(
       height: double.maxFinite,
@@ -178,7 +179,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Color.fromARGB(255, 243, 16, 72));
                                   profileService.logout();
                                   productService.logout();
-                                  cartService.logout();                                  
+                                  cartService.logout();    
+                                  idprovoder.logoutid();                              
                                   setState(() {
                                     url = null;
                                     widget.id = "";

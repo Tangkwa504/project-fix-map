@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -7,10 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:map_location_picker/map_location_picker.dart';
 
 import '../firebase_options.dart';
+import '../map/map.dart';
 import '../widgets/Service.dart';
 import 'login_screen.dart';
 
@@ -21,6 +27,8 @@ String Name = "";
 String Address = "";
 String Tel = "";
 String Password2 = "";
+late double lat  ;
+late double long ;
 
 class singupmix extends StatefulWidget {
   const singupmix({super.key});
@@ -35,6 +43,7 @@ class _singupmixState extends State<singupmix> {
   TextEditingController UserPass = TextEditingController();
   TextEditingController Checkpass = TextEditingController();
   ImagePicker _picker = ImagePicker();
+   bool iserror = false;
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     print("test");
@@ -47,6 +56,11 @@ class _singupmixState extends State<singupmix> {
       profileService.addFile(images);
     }
   }
+  bool isValidEmail(String email) {
+  // ใช้ Regular Expression เพื่อตรวจสอบรูปแบบอีเมล
+  final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+  return emailRegex.hasMatch(email);
+}
 
   @override
   Widget build(BuildContext context) {
@@ -154,28 +168,64 @@ class _singupmixState extends State<singupmix> {
             const SizedBox(height: 12),
             InkWell(
               onTap: () {
-                if (Emailinput.text.isNotEmpty &&
-                    UserPass.text.isNotEmpty &&
-                    Checkpass.text.isNotEmpty &&
-                    UserPass.text == Checkpass.text) {
-                  Email = Emailinput.text;
-                  Password = UserPass.text;
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const singupmix2(),
-                      ));
-                } else if (UserPass.text != Checkpass.text) {
+                String user = Emailinput.text.trim();
+                 if (!isValidEmail(user)) {
                   Fluttertoast.showToast(
-                      msg: "รหัสผ่านไม่ตรงกัน", gravity: ToastGravity.TOP);
-                } else {
-                  Fluttertoast.showToast(
-                      msg: "โปรดกรอกข้อมูลให้ครบถ้วน",
-                      gravity: ToastGravity.TOP);
+                    msg: "ประเภทของอีเมลที่ใช้สมัครไม่ถูกต้อง",
+                    gravity: ToastGravity.TOP,
+                  );
+                  return;
                 }
-                // Email = Emailinput.text;
-                // Password = UserPass.text;
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => const singupmix2(),));
+                DatabaseReference starCountRef =
+                    FirebaseDatabase.instance.ref('User');
+                starCountRef.onValue.listen((DatabaseEvent event) {
+                  final data = event.snapshot.value;
+                  Map<String, dynamic> map = json.decode(json.encode(data));
+                  print("this is value from user : $user");
+                  map.forEach(
+                    (key, value) {
+                      print("this is value from firebase : ${value['Email']}");
+                      if (user == value["Email"].toString()) {
+                        //เช็คเมล userlogin
+                        setState(() {
+                          iserror = true;
+                        });
+                        print("$iserror = Iserror");
+                        print("value has been set true");
+                      }
+                    },
+                  );
+                });
+                Timer(const Duration(seconds: 1), () {
+                  print("value bool : $iserror");
+                  if (iserror) {
+                    Fluttertoast.showToast(
+                        msg: "อีเมลถูกใช้งานแล้ว", gravity: ToastGravity.TOP);
+                    return;
+                  }
+                  if (Emailinput.text.isNotEmpty &&
+                      UserPass.text.isNotEmpty &&
+                      Checkpass.text.isNotEmpty &&
+                      UserPass.text == Checkpass.text) {
+                    Email = Emailinput.text;
+                    Password = UserPass.text;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const singupmix2(),
+                        ));
+                  } else if (UserPass.text != Checkpass.text) {
+                    Fluttertoast.showToast(
+                        msg: "รหัสผ่านไม่ตรงกัน", gravity: ToastGravity.TOP);
+                  } else {
+                    Fluttertoast.showToast(
+                        msg: "โปรดกรอกข้อมูลให้ครบถ้วน",
+                        gravity: ToastGravity.TOP);
+                  }
+                  // Email = Emailinput.text;
+                  // Password = UserPass.text;
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => const singupmix2(),));
+                });
               },
               child: Container(
                 width: 400,
@@ -240,14 +290,41 @@ class _singupmix2State extends State<singupmix2> {
   TextEditingController Fullname = TextEditingController();
   TextEditingController UserAddress = TextEditingController();
   TextEditingController UserTel = TextEditingController();
+   Position? userLocation;
   
   
   SingingCharacter? _character = SingingCharacter.user; //เรียกใช้ enum
+
+  Future<void> _getLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    userLocation = await Geolocator.getCurrentPosition();
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     initfirebase();
+    _getLocation();
     super.initState();
   }
 
@@ -298,19 +375,58 @@ class _singupmix2State extends State<singupmix2> {
               ),
             ),
             const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              width: 400,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.grey.withOpacity(0.4),
-              ),
-              child: TextField(
-                controller: UserAddress,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: "Address",
-                  border: InputBorder.none,
+            InkWell(
+              onTap: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return MapLocationPicker(
+                            apiKey: "AIzaSyAqyETt9iu7l5QioWz5iwEbzrallQrpzLs",
+                            popOnNextButtonTaped: true,
+                            currentLatLng: LatLng(userLocation!.latitude,userLocation!.longitude),
+                            onNext: (GeocodingResult? result) {
+                              if (result != null) {
+                                Location latlong = result.geometry.location;
+                                setState(() {
+                                  print("1=============> ${result.formattedAddress}");
+                                  UserAddress.text = result.formattedAddress.toString();
+                                  print("=============> ${latlong.lat}");
+                                  print("=============> ${latlong.lng}");
+                                  lat  = latlong.lat;
+                                  long = latlong.lng;
+                                });
+                              }
+                            },
+                            onSuggestionSelected:
+                                (PlacesDetailsResponse? result) {
+                              if (result != null) {
+                                setState(() {
+                                  print(result.result.geometry!.location);
+                                  result.result.formattedAddress ?? "";
+                                });
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                width: 400,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.withOpacity(0.4),
+                ),
+                child: TextField(
+                  enabled: false,
+                  controller: UserAddress,
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: InputDecoration(
+                    hintText: "Address",
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
             ),
