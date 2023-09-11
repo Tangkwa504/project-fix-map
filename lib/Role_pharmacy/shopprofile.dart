@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:provider/provider.dart';
+
+import '../chat/chat.dart';
+import '../widgets/Service.dart';
 
 class Shopprofile extends StatefulWidget {
   Shopprofile({
@@ -12,6 +16,7 @@ class Shopprofile extends StatefulWidget {
     required this.Timeopening,
     required this.Url,
     required this.Licensepharmacy,
+    required this.PharmacyEmail,
   });
 
   String Shopname;
@@ -21,6 +26,7 @@ class Shopprofile extends StatefulWidget {
   String Timeclosing;
   String? Url;
   String Licensepharmacy;
+  String PharmacyEmail;
 
   @override
   State<Shopprofile> createState() => _ShopprofileState();
@@ -95,7 +101,11 @@ class _ShopprofileState extends State<Shopprofile> {
             Center(
               child: InkWell(
                 onTap: () {
-                  //Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage(),));
+                  ProviderSer profileService =
+                  Provider.of<ProviderSer>(context, listen: false);
+                  //final userProvider = Provider.of<Useridprovider>(context, listen: false);
+                  print(profileService.reademail);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(chatName: widget.Shopname, image: widget.Url.toString(), receiverId: widget.PharmacyEmail, senderId:profileService.reademail,),));
                 },
                 child: Container(
                   width: 200,

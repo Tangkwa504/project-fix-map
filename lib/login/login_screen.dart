@@ -201,7 +201,7 @@ void checklogin(String user ,String password,context) {
       print(map);
       list = [];
       map.forEach(
-        (key, value) {
+        (key, value) {   
           if(user==value["Email"]){  //เช็คเมล userlogin
             if(password==value["Password"]){  //เช็ค pass userlogin
             print(key);
@@ -210,7 +210,6 @@ void checklogin(String user ,String password,context) {
                       backgroundColor: Colors.green
                       );
               String pushemail = user;
-              appservice.email = "1";
               profileService.setemail(user);
               profileService.setkey(key);
               //profileService.setuser(value["Name"],value["Password"],value["Addressshop"],value["Tel"]); //เช็ค login pharmacy

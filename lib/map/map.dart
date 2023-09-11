@@ -60,7 +60,7 @@ class _MapsPageState extends State<MapsPage> {
       print("ทดสอบบบ =  ${nearestMarker}");
       List<shopmarkermodel> nearshop = shopdata.where((element) => MarkerId(element.id) == nearestMarker?.markerId).toList();
       if(nearshop.length > 0){
-        openprofileshop(address: nearshop[0].address, licensepharmacy: nearshop[0].licensepharmacy, pharmacyname: nearshop[0].pharmacyname, timeclosing: nearshop[0].timeclosing, timeopening: nearshop[0].timeopening, title: nearshop[0].title, url: nearshop[0].url);
+        openprofileshop(id: nearshop[0].id ,address: nearshop[0].address, licensepharmacy: nearshop[0].licensepharmacy, pharmacyname: nearshop[0].pharmacyname, timeclosing: nearshop[0].timeclosing, timeopening: nearshop[0].timeopening, title: nearshop[0].title, url: nearshop[0].url);
         print("URLINOPEN ===== ${nearshop[0].url}");
       }
       print('ทดสอบ 2  ====  $nearshop');
@@ -123,9 +123,9 @@ void _onMarkerTapped(Marker marker) {
 }
 
 void openprofileshop({required String address, required String pharmacyname, required String title, required String timeclosing, required String 
-timeopening, required String? url, required String licensepharmacy}){
+timeopening, required String? url, required String licensepharmacy,required String id}){
   Navigator.push(context, MaterialPageRoute(builder: (context) => Shopprofile(Addressshop: address, Pharmacyname: pharmacyname, Shopname: title,
-         Timeclosing: timeclosing, Timeopening: timeopening, Url: url, Licensepharmacy: licensepharmacy)));
+         Timeclosing: timeclosing, Timeopening: timeopening, Url: url, Licensepharmacy: licensepharmacy, PharmacyEmail: id,)));
           print("URL ====== $url");
 }
 
@@ -136,7 +136,7 @@ void createMarker(double lat, double lng, String id, String title, String addres
       title: title,
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => Shopprofile(Addressshop: address, Pharmacyname: pharmacyname, Shopname: title,
-         Timeclosing: timeclosing, Timeopening: timeopening, Url: url, Licensepharmacy: licensepharmacy)));
+         Timeclosing: timeclosing, Timeopening: timeopening, Url: url, Licensepharmacy: licensepharmacy, PharmacyEmail: id,)));
         print("Testmapp");
       },
     ),

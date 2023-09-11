@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-     appservice.email = "1"; // คำสั่งกำหนดค่าให้ตัวแปรที่จะเก็บเข้า Service
+     //appservice.email = "1"; // คำสั่งกำหนดค่าให้ตัวแปรที่จะเก็บเข้า Service
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create:(_) => ProviderSer()),

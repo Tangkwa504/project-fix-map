@@ -1,13 +1,12 @@
-import 'package:app_first/login/singupmix_screen.dart';
-import 'package:app_first/profile/profile.dart';
+
 import 'package:flutter/material.dart';
 
 import '../Products/Cart.dart';
-import '../Shoppingcart.dart';
-import '../chat.dart';
-import '../firebase.dart';
+
+import '../chat/chat.dart';
+
 import 'home_page.dart';
-import '../map/map.dart';
+
 import '../profile/profile_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,7 +28,7 @@ class _HomeScreenState
 
 
 
-      const MyApp(),
+      ChatScreen(chatName: 'test', image: 'test', receiverId: 'tktk', senderId:email ,),
       CartScreen(),
       ProfilePage(id:email),
     ];
