@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:provider/provider.dart';
 
-import '../chat/chat.dart';
-import '../widgets/Service.dart';
+import 'guest_to_register.dart';
 
-class Shopprofile extends StatefulWidget {
-  Shopprofile({
+class Shopprofileguest extends StatefulWidget {
+  Shopprofileguest({
     super.key,
     required this.Shopname,
     required this.Addressshop,
@@ -29,10 +27,10 @@ class Shopprofile extends StatefulWidget {
   String PharmacyEmail;
   String Userkey;
   @override
-  State<Shopprofile> createState() => _ShopprofileState();
+  State<Shopprofileguest> createState() => _ShopprofileguestState();
 }
 
-class _ShopprofileState extends State<Shopprofile> {
+class _ShopprofileguestState extends State<Shopprofileguest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,11 +99,7 @@ class _ShopprofileState extends State<Shopprofile> {
             Center(
               child: InkWell(
                 onTap: () {
-                  ProviderSer profileService =
-                  Provider.of<ProviderSer>(context, listen: false);
-                  //final userProvider = Provider.of<Useridprovider>(context, listen: false);
-                  print(profileService.reademail);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(chatName: widget.Shopname, image: widget.Url.toString(), receiverId: widget.Userkey, senderId:profileService.readid,),));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const forceregister(),));
                 },
                 child: Container(
                   width: 200,

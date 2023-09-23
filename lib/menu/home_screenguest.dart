@@ -1,15 +1,9 @@
-import 'package:app_first/login/singupmix_screen.dart';
-import 'package:app_first/profile/profile.dart';
+
 import 'package:flutter/material.dart';
 
-import '../Products/Cart.dart';
+
 import '../Role_guest/guest_to_register.dart';
-import '../Shoppingcart.dart';
-import '../chat.dart';
-import '../firebase.dart';
-import 'home_page.dart';
-import '../map/map.dart';
-import '../profile/profile_page.dart';
+
 import 'home_pageguset.dart';
 
 class HomeScreenguest extends StatefulWidget {
@@ -24,7 +18,7 @@ class _HomeScreenguestState
   int _currentTabIndex = 0;
   @override
   Widget build(BuildContext context) {
-    String email = "${widget.id}";
+
     final _kTabPages = <Widget>[
       const HomePageguest(),
 

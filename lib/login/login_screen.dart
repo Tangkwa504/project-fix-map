@@ -2,24 +2,22 @@ import 'dart:convert';
 import 'package:app_first/model/Userid.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:app_first/login/singupmix_screen.dart';
-import 'package:app_first/menu/home_page.dart';
+
 import 'package:app_first/menu/home_screen.dart';
-import 'package:app_first/login/singup_screen.dart';
-import 'package:app_first/first_page.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:provider/provider.dart';
 
 
 
 import '../firebase_options.dart';
-import '../profile/profile_page.dart';
-import '../system/cookise.dart';
+
 import '../widgets/Service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -210,7 +208,8 @@ void checklogin(String user ,String password,context) {
                       backgroundColor: Colors.green
                       );
               String pushemail = user;
-              profileService.setemail(user);
+              
+              profileService.setemail(user,value["Id"]);
               profileService.setkey(key);
               //profileService.setuser(value["Name"],value["Password"],value["Addressshop"],value["Tel"]); //เช็ค login pharmacy
               profileService.setuser(value["Name"],value["Password"],value["Address"],value["Tel"]); //เช็ค Login User 

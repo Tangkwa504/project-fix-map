@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-import '../menu/home_screen.dart';
-import '../login/login_screen.dart';
-import '../login/singup_screen.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});

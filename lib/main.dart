@@ -1,14 +1,10 @@
-import 'package:app_first/menu/home_screen.dart';
+
 import 'package:app_first/first_page.dart';
-import 'package:app_first/login/login_screen.dart';
-import 'package:app_first/profile/setting_profile.dart';
+
 import 'package:app_first/widgets/Service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'chatmockup.dart';
-import 'login/login_test.dart';
 
 void main()async{ 
   runApp(const MyApp());

@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:app_first/login/singupmix_screen.dart';
 import 'package:app_first/menu/home_screen.dart';
 import 'package:app_first/login/login_screen.dart';
-import 'package:app_first/login/singup_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
-import 'login/singup_pharmacy.dart';
+
 import 'menu/home_screenguest.dart';
 import 'widgets/Service.dart';
 

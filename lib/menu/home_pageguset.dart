@@ -8,7 +8,7 @@ import '../Products/Productspage.dart';
 import '../Role_guest/bottomhomeguest.dart';
 
 import '../login/login_screen.dart';
-import '../map/map.dart';
+import '../map/map_guest.dart';
 
 class HomePageguest extends StatefulWidget {
   const HomePageguest({super.key});
@@ -37,8 +37,8 @@ class _HomePageguestState extends State<HomePageguest> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Bottonhomeguest(title: "ค้นหาอัตโนมัติ",page: LoginScreen(),icon: Icons.refresh),
-                Bottonhome(title: "ค้นหาร้านยา",page: MapsPage(lat:"",long:"",opennow: false,),icon: Icons.pin_drop),
+                Bottonhome(title: "ค้นหาอัตโนมัติ",page: MapsPageguest(lat:"",long:"",opennow: true,),icon: Icons.refresh),
+                Bottonhome(title: "ค้นหาร้านยา",page: MapsPageguest(lat:"",long:"",opennow: false,),icon: Icons.pin_drop),
               ],
             ),
             const SizedBox(height: 12),

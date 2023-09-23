@@ -7,16 +7,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../Role_pharmacy/shopprofile.dart';
+import '../Role_guest/shopprofileguest.dart';
 import '../firebase_options.dart';
 import '../model/createmarker.dart';
 import '../widgets/Service.dart';
 
-class MapsPage extends StatefulWidget {
-  MapsPage({super.key, required this.lat ,required this.long,required this.opennow});
+class MapsPageguest extends StatefulWidget {
+  MapsPageguest({super.key, required this.lat ,required this.long,required this.opennow});
 
   @override
-  _MapsPageState createState() => _MapsPageState();
+  _MapsPageguestState createState() => _MapsPageguestState();
   
   String lat;
   String long;
@@ -26,7 +26,7 @@ class MapsPage extends StatefulWidget {
 }
 
 
-class _MapsPageState extends State<MapsPage> {
+class _MapsPageguestState extends State<MapsPageguest> {
   late Position userLocation;
   late GoogleMapController mapController;
   List<Marker> _markers = [];
@@ -127,7 +127,7 @@ void _onMarkerTapped(Marker marker) {
 
 void openprofileshop({required String address, required String pharmacyname, required String title, required String timeclosing, required String 
 timeopening, required String? url, required String licensepharmacy,required String id,required String userkey}){
-  Navigator.push(context, MaterialPageRoute(builder: (context) => Shopprofile(Userkey:userkey,Addressshop: address, Pharmacyname: pharmacyname, Shopname: title,
+  Navigator.push(context, MaterialPageRoute(builder: (context) => Shopprofileguest(Userkey:userkey,Addressshop: address, Pharmacyname: pharmacyname, Shopname: title,
          Timeclosing: timeclosing, Timeopening: timeopening, Url: url, Licensepharmacy: licensepharmacy, PharmacyEmail: id)));
           print("URL ====== $url");
 }
@@ -138,7 +138,7 @@ void createMarker({required double lat, required double lng, required String id,
     infoWindow: InfoWindow(
       title: title,
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Shopprofile(Userkey:userkey,Addressshop: address, Pharmacyname: pharmacyname, Shopname: title,
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Shopprofileguest(Userkey:userkey,Addressshop: address, Pharmacyname: pharmacyname, Shopname: title,
          Timeclosing: timeclosing, Timeopening: timeopening, Url: url, Licensepharmacy: licensepharmacy, PharmacyEmail: id)));
 
       },

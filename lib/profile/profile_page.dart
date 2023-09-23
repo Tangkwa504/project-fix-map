@@ -1,22 +1,20 @@
-import 'dart:convert';
 
-import 'package:app_first/login/singupmix_screen.dart';
+
 import 'package:app_first/profile/setting_profile.dart';
 import 'package:app_first/widgets/Service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-import '../firebase.dart';
+
 import '../firebase_options.dart';
 import '../first_page.dart';
-import '../login/login_screen.dart';
+
 import '../widgets/alertdialog.dart';
 
 class ProfilePage extends StatefulWidget {

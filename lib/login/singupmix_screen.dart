@@ -16,7 +16,6 @@ import 'package:provider/provider.dart';
 import 'package:map_location_picker/map_location_picker.dart';
 
 import '../firebase_options.dart';
-import '../map/map.dart';
 import '../widgets/Service.dart';
 import 'login_screen.dart';
 
@@ -293,7 +292,7 @@ class _singupmix2State extends State<singupmix2> {
    Position? userLocation;
   
   
-  SingingCharacter? _character = SingingCharacter.user; //เรียกใช้ enum
+  //SingingCharacter? _character = SingingCharacter.user; //เรียกใช้ enum
 
   Future<void> _getLocation() async {
     bool serviceEnabled;
@@ -539,9 +538,11 @@ void writefirebase(ProviderSer provider) async {
 
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-  String path = "User/${getRandomString(10)}";
+      String rendomString = getRandomString(10);
+  String path = "User/${rendomString}";
   DatabaseReference ref = FirebaseDatabase.instance.ref(path);
   await ref.set({
+    "Id": rendomString,
     "Email": Email,
     "Password": Password,
     "Address": Address,
@@ -549,7 +550,7 @@ void writefirebase(ProviderSer provider) async {
     "Tel": Tel,
   });
 
-  provider.setemail(Email);
+  provider.setemail(Email,rendomString);
   provider.uploadImages();
   provider.createcol(Email);
 }

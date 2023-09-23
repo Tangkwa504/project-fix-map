@@ -1,20 +1,16 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../model/chat.dart';
-import '../widgets/Service.dart';
 
 class ChatScreen extends StatefulWidget {
   final String receiverId;
   final String chatName;
   final String senderId;
   final String image;
-
 
   const ChatScreen({
     Key? key,
@@ -31,101 +27,58 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   late IO.Socket socket;
 
-  bool showDate = false; // Variable to track the display of the date
 
+
+  bool showDate = false;
   TextEditingController messageController = TextEditingController();
   List<String> chatMessages = [];
   List<Chat> chatHistory = [];
   int showDateIndex = 0;
+  List list = [];
+  String room = "";
+  String sender = "RxtPwijnPm";
+  List msg = [];
+
   @override
   void initState() {
+    getroom();
+    print("widget.receiverId === " + widget.receiverId);
+    print("widget.senderId === " + widget.senderId);
     super.initState();
-    connectSocket();
-    loadChatHistory();
+  }
+
+  void getroom() {
+    DatabaseReference starCountRef =
+        FirebaseDatabase.instance.ref('User/${widget.senderId}/chat/${widget.receiverId}');
+    starCountRef.onValue.listen((DatabaseEvent event) {
+      print(event.snapshot.value);
+      room = event.snapshot.value.toString();
+
+      getmsg();
+    });
   }
   
 
-  Future<void> loadChatHistory() async {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  CollectionReference chatHistoryCollection = firestore.collection('chat_history');
-
-  try {
-    QuerySnapshot querySnapshot = await chatHistoryCollection.get();
-
-    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-
-      // ตรวจสอบคู่ค่า senderId และ receiverId และเพิ่มลงใน chatHistory
-      if (data['senderId'] != null && data['receiverId'] != null) {
-        Timestamp timestamp = data['timestamp'];
-        DateTime date = timestamp.toDate(); 
-        DateTime utc = date.toUtc();
-        String iso = DateFormat("yyyy-MM-dd HH:mm:ss.SSS'Z'").format(utc);
-        Chat chat = Chat(
-          senderId: data['senderId'],
-          receiverId: data['receiverId'],
-          message: data['message'],
-          timestamp: DateTime.parse(iso),
-          //timestamp: DateFormat("yyyy-MM-dd HH:mm:ss.SSS'Z'").parse(timestamp.toDate().toIso8601String()),
-          // อื่น ๆ ที่คุณต้องการใส่ลงใน Chat object data['timestamp']  DateTime.parse(timestamp.toDate().toString())
-          
-        );
-        print(DateTime.timestamp());
-        print("DateTime = "+date.toString());
-        print("datasenderId = "+data['senderId']);
-        print("datareceiverId = "+data['receiverId']);
-        chatHistory.add(chat);
-      }
-    }
-    chatHistory.forEach((element) {
-      print(element.message);
-      print(element.receiverId);
-      print(element.senderId);
-      print(element.timestamp);
+  void getmsg() {
+    DatabaseReference starCountRef = FirebaseDatabase.instance.ref('chatroom/$room/message');
+    starCountRef.onValue.listen((DatabaseEvent event) {
+      print(event.snapshot.value);
+      msg = event.snapshot.value as List;
+      print("List ${msg}");
+      setState(() {});
     });
-    setState(() {});
-  } catch (e) {
-    print('Error loading chat history: $e');
-  }
-}
-
- void connectSocket() {
-    socket = IO.io('http://192.168.1.3:3000', 
-    <String, dynamic>{
-      'transports': ['websocket'],
-      'autoConnect': true,
-    });
-    socket.onConnect((_) {
-      print('connect');
-      socket.emit('msg', 'test');
-    });
-    socket.on('chat message', (data) {
-      setState(() {
-        chatMessages.add(data['message']);
-      });
-    });
-    socket.connect();
   }
 
-  void sendMessage(String message) {
-    socket.emit('message', {
-      'senderId': widget.senderId,
-      'receiverId': widget.receiverId,
-      'message': message,
-    });
+  void sendMesg() async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("chatroom/$room/message/${msg.length}");
 
-    setState(() {
-      loadChatHistory();
-      showDateIndex = 0;
-      showDate = false;
+    await ref.set({
+      "msg": messageController.text,
+      "sender": widget.senderId,
+      "receiver": widget.receiverId,
+      "time": 1694937735,
     });
     messageController.clear();
-  }
-
-  @override
-  void dispose() {
-    socket.disconnect();
-    super.dispose();
   }
 
   @override
@@ -160,7 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
             ] else ...[
-              
+
             ],
             const SizedBox(
               width: 15,
@@ -172,83 +125,78 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ],
         ),
+        actions: <Widget>[
+    IconButton(
+      icon: Icon(Icons.shopping_cart), // แทนด้วยไอคอนของตะกร้า add_shopping_cart ไอคอนตะกร้าแอด
+      onPressed: () {
+        // ตอนที่ปุ่มถูกคลิก
+        // เพิ่มโค้ดที่คุณต้องการให้มันทำอะไรเมื่อปุ่มถูกคลิกที่นี่
+      },
+    ),
+  ],
+  
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              reverse: true, // เพื่อให้เรียงลำดับจากล่าสุดไปยังเก่าสุด
-              itemCount: chatHistory.length,
-              itemBuilder: (context, index) {
-                final chat = chatHistory[index];
-                final isSentMessage = chat.senderId == widget.senderId;//เช็คId ผู้ส่ง
-                final timeDate = chat.localTimestamp.toString();
-
-                final inputFormat = DateFormat("yyyy-MM-dd HH:mm:ss.SSS'Z'");
-                final outputFormat = DateFormat("HH:mm 'น.'");
-
-                final parsedDate = inputFormat.parse(timeDate);
-                final formattedDate = outputFormat.format(parsedDate);
-
-                return Container(
-                  padding: const EdgeInsets.only(
-                      left: 14, right: 14, top: 10, bottom: 10),
-                  child: Align(
-                    alignment: (isSentMessage
-                        ? Alignment.topRight//true ชิดขวา
-                        : Alignment.topLeft),//ไม่ใช่ ชิดซ้าย
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          showDate = !showDate;
-                          showDateIndex = index;
-                        });
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: Container(
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                    //reverse: true,
+                  itemCount: msg.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: msg[index]['sender'] == sender
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
                         children: [
-                          if (showDate && index == showDateIndex)
-                            Container(
-                              //margin: const EdgeInsets.only(bottom: 4),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: msg[index]['sender'] == sender
+                                     ? Colors.blue
+                                     : Colors.grey, // แก้ไขสีพื้นหลังตรงนี้
+                              borderRadius: BorderRadiusDirectional.circular(16),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                formattedDate,
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 8,
-                                ),
+                                "${msg[index]['msg']}",
+                                style: TextStyle(fontSize: 20, color: Colors.white),
                               ),
                             ),
+                          ),
                         ],
                       ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: messageController,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter a message',
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    sendMessage(messageController.text);
-                    messageController.clear();
+                    );
                   },
-                  icon: const Icon(Icons.send),
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: messageController,
+                        decoration: const InputDecoration(
+                          hintText: 'Enter a message',
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        sendMesg();
+                      },
+                      icon: const Icon(Icons.send),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

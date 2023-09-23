@@ -20,6 +20,7 @@ class Appservice {
 
 class ProviderSer extends ChangeNotifier {
   String reademail = "";
+  String readid = "";
   List<File> imgfile = [];
   List<File> imgfileshop = [];
   List<String> imgurl = [];
@@ -76,8 +77,9 @@ class ProviderSer extends ChangeNotifier {
     await cartRef.set({'products': products});
   }
 
-  void setemail(String mail) async {
+  void setemail(String mail,String id) async {
     reademail = mail;
+    readid = id;
     url = await getProfileImageUrl();
     print(url);
     notifyListeners();

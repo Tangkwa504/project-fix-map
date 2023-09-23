@@ -255,8 +255,7 @@ class _singupmix2State extends State<singupmix2> {
 
   @override
   Widget build(BuildContext context) {
-    ProviderSer profileService =
-        Provider.of<ProviderSer>(context, listen: true);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -638,7 +637,8 @@ void writefirebase(ProviderSer provider) async {
 
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-  String path = "User/${getRandomString(10)}";
+      String rendomString = getRandomString(10);
+  String path = "User/${rendomString}";
   DatabaseReference ref = FirebaseDatabase.instance.ref(path);
   await ref.set({
     "Email": Email,
@@ -650,10 +650,11 @@ void writefirebase(ProviderSer provider) async {
     "Addressshop" : Addressshop,
     "Timeopening" : Timeopening,
     "Timeclosing" : Timeclosing,
+    "Id": rendomString,
 
 
   });
-  provider.setemail(Email);
+  provider.setemail(Email,rendomString);
   provider.uploadImages();
   provider.uploadImagesshop();
   provider.createcol(Email);
