@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../model/chat.dart';
@@ -36,25 +36,68 @@ class _ChatScreenState extends State<ChatScreen> {
   int showDateIndex = 0;
   List list = [];
   String room = "";
-  String sender = "RxtPwijnPm";
+  String sender = "";
+  String receiver = "";
   List msg = [];
 
   @override
   void initState() {
+    sender = widget.senderId;
+    receiver = widget.receiverId;
     getroom();
     print("widget.receiverId === " + widget.receiverId);
     print("widget.senderId === " + widget.senderId);
+
     super.initState();
   }
+ 
+  void createroom(){
+      String pathuser = "User/${widget.senderId}/chat";
+      String pathpharmacy ="Pharmacy/${widget.receiverId}/chat";
+      
+      DatabaseReference refuser = FirebaseDatabase.instance.ref(pathuser);
+      DatabaseReference refpharmacy = FirebaseDatabase.instance.ref(pathpharmacy);
+      String newroom ="room"+"${widget.senderId}"+"and"+"${widget.receiverId}";
+      DatabaseReference createdroom = FirebaseDatabase.instance.ref("chatroom/$newroom/message/${msg.length}");
+      createdroom.set({
+      "msg": "นี่คือข้อความอัตโนมัติจากร้าน "+widget.chatName,
+      "sender": widget.receiverId,
+      "receiver": widget.senderId,
+      "time": 1694937735,
+    });
+      refuser.update({
+        "$receiver": newroom ,
+      //"chat":[{"${widget.receiverId}":"${newroom}"}]
 
+      });
+      refpharmacy.update({
+        "$sender": newroom ,
+        //"chat":[{"${widget.senderId}":"${newroom}"}]
+
+      });
+       
+      
+     room = newroom;
+     setState(() {});
+     getroom();
+
+  }
   void getroom() {
     DatabaseReference starCountRef =
         FirebaseDatabase.instance.ref('User/${widget.senderId}/chat/${widget.receiverId}');
     starCountRef.onValue.listen((DatabaseEvent event) {
       print(event.snapshot.value);
+      String checkroom = "${event.snapshot.value.toString()}";
+      if(checkroom == "null"){
+        createroom();
+      }else{
       room = event.snapshot.value.toString();
 
       getmsg();
+      }
+      // room = event.snapshot.value.toString();
+
+      // getmsg();
     });
   }
   
@@ -62,7 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void getmsg() {
     DatabaseReference starCountRef = FirebaseDatabase.instance.ref('chatroom/$room/message');
     starCountRef.onValue.listen((DatabaseEvent event) {
-      print(event.snapshot.value);
+      print("event getmsg"+"${event.snapshot.value}");
       msg = event.snapshot.value as List;
       print("List ${msg}");
       setState(() {});
