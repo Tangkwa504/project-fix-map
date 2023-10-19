@@ -57,7 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
       
       DatabaseReference refuser = FirebaseDatabase.instance.ref(pathuser);
       DatabaseReference refpharmacy = FirebaseDatabase.instance.ref(pathpharmacy);
-      String newroom ="room"+"${widget.senderId}"+"and"+"${widget.receiverId}";
+      String newroom ="room"+"${widget.senderId}"+"-&-"+"${widget.receiverId}";
       DatabaseReference createdroom = FirebaseDatabase.instance.ref("chatroom/$newroom/message/${msg.length}");
       createdroom.set({
       "msg": "นี่คือข้อความอัตโนมัติจากร้าน "+widget.chatName,
@@ -114,12 +114,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void sendMesg() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("chatroom/$room/message/${msg.length}");
-
+    int currentTimeMillis = DateTime.now().millisecondsSinceEpoch;
     await ref.set({
       "msg": messageController.text,
       "sender": widget.senderId,
       "receiver": widget.receiverId,
-      "time": 1694937735,
+      "time": currentTimeMillis
     });
     messageController.clear();
   }
@@ -244,3 +244,4 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+
