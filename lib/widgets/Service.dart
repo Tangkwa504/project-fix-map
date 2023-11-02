@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 import '../model/Products.dart';
 import '../model/User.dart';
@@ -24,6 +26,7 @@ class ProviderSer extends ChangeNotifier {
   List<File> imgfile = [];
   List<File> imgfileshop = [];
   List<String> imgurl = [];
+  Uint8List? imgbyte;
   ModelUsers user =
       ModelUsers(username: "", userpass: "", useraddress: "", usertel: "");
   String? url;
@@ -110,12 +113,19 @@ class ProviderSer extends ChangeNotifier {
     }
   }
 
+  
   Future<String?> getProfileImageUrl() async {
     try {
       final ref = store.ref('users/$reademail/image');
       final result = await ref.listAll();
       if (result.items.isNotEmpty) {
         final url = await result.items.first.getDownloadURL();
+        if(imgbyte==null){
+          final res = await http.get(Uri.parse(url));
+          //log(res.bodyBytes.toString());
+          imgbyte = res.bodyBytes;
+          
+        }
         print(url);
         return url;
       }

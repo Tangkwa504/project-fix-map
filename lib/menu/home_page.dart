@@ -1,4 +1,5 @@
 
+import 'package:app_first/chat/chatdm.dart';
 import 'package:app_first/widgets/bottonhome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 
 import '../Products/Productspage.dart';
 
-import '../login/login_screen.dart';
+
 import '../map/map.dart';
 
 class HomePage extends StatefulWidget {
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Bottonhome(title: "QRCODE",page: ProductsPage(),icon: Icons.qr_code),
-                Bottonhome(title: "ประวัติสนทนา",page: LoginScreen(),icon: Icons.chat),
+                Bottonhome(title: "ประวัติสนทนา",page: chatdm(),icon: Icons.chat),
               ],
             ),
           ],

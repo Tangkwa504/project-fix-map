@@ -95,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 child: TextField( 
                   controller: PasswordLogin,
+                   obscureText: true,
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
                     prefixIcon: Icon(

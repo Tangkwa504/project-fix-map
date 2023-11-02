@@ -222,7 +222,7 @@ class _ProfilePageState extends State<ProfilePage> {
             left: MediaQuery.of(context).size.width / 2 - 75,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(75),
-              child: url != null ? Image.network(url!, height: 150,
+              child: profileService.imgbyte != null ? Image.memory(profileService.imgbyte!, height: 150,
                 width: 150, fit: BoxFit.cover,) : Image.asset(
                 "assets/profile.png",
                 height: 150,

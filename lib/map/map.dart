@@ -277,20 +277,21 @@ void createMarker({required double lat, required double lng, required String id,
           }
         },
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton.extended(
-            onPressed: findNearestMarker,
-            label: Text("ค้นหา Marker ที่ใกล้ที่สุด"),
-            icon: Icon(Icons.place),
-          ),
-          if (nearestMarker != null && nearestDistance != null)
-            Text("Marker ที่ใกล้ที่สุด: ${nearestMarker!.infoWindow.title}"),
-          if (nearestMarker != null && nearestDistance != null)
-            Text("ระยะทาง: ${nearestDistance!.toStringAsFixed(2)} เมตร"),
-        ],
-      ),
+      // ปุ่ม
+      // floatingActionButton: Column(
+      //   mainAxisAlignment: MainAxisAlignment.end,
+      //   children: [
+      //     FloatingActionButton.extended(
+      //       onPressed: findNearestMarker,
+      //       label: Text("ค้นหา Marker ที่ใกล้ที่สุด"),
+      //       icon: Icon(Icons.place),
+      //     ),
+      //     if (nearestMarker != null && nearestDistance != null)
+      //       Text("Marker ที่ใกล้ที่สุด: ${nearestMarker!.infoWindow.title}"),
+      //     if (nearestMarker != null && nearestDistance != null)
+      //       Text("ระยะทาง: ${nearestDistance!.toStringAsFixed(2)} เมตร"),
+      //   ],
+      // ),
     );
   }
 }

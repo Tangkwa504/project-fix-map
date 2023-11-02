@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,11 @@ class Shopprofile extends StatefulWidget {
   @override
   State<Shopprofile> createState() => _ShopprofileState();
 }
+
+void createrequset(){
+   
+    
+  }
 
 class _ShopprofileState extends State<Shopprofile> {
   @override
@@ -105,7 +111,17 @@ class _ShopprofileState extends State<Shopprofile> {
                   Provider.of<ProviderSer>(context, listen: false);
                   //final userProvider = Provider.of<Useridprovider>(context, listen: false);
                   print(profileService.reademail);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(chatName: widget.Shopname, image: widget.Url.toString(), receiverId: widget.Userkey, senderId:profileService.readid,),));
+                   String senderid = profileService.readid;
+                   String receiverId = widget.Userkey;
+
+                   String pathpharmacy ="Pharmacy/$receiverId/request";
+      
+                   DatabaseReference refpharmacyrequest = FirebaseDatabase.instance.ref(pathpharmacy);
+                   refpharmacyrequest.update({
+                   senderid:"requestid" ,
+                  });
+                  
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ChatScreen(chatName: widget.Shopname, image: widget.Url.toString(), receiverId: widget.Userkey, senderId:profileService.readid,),));
                 },
                 child: Container(
                   width: 200,
