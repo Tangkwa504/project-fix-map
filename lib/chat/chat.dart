@@ -1,11 +1,15 @@
+import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../model/chat.dart';
+import '../widgets/Service.dart';
 
 class ChatScreen extends StatefulWidget {
   final String receiverId;
@@ -26,9 +30,9 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  late IO.Socket socket;
-
-
+  List<File> imgfile = [];
+  List<String> imgurl = [];
+  int uploadProgress = 0;
 
   bool showDate = false;
   TextEditingController messageController = TextEditingController();
@@ -51,63 +55,52 @@ class _ChatScreenState extends State<ChatScreen> {
 
     super.initState();
   }
-  
 
-  void createroom(){
-      String pathuser = "User/${widget.senderId}/chat";
-      String pathpharmacy ="Pharmacy/${widget.receiverId}/chat";
-      
-      DatabaseReference refuser = FirebaseDatabase.instance.ref(pathuser);
-      DatabaseReference refpharmacy = FirebaseDatabase.instance.ref(pathpharmacy);
-      String newroom ="room"+"${widget.senderId}"+"-&-"+"${widget.receiverId}";
-      DatabaseReference createdroom = FirebaseDatabase.instance.ref("chatroom/$newroom/message/${msg.length}");
-      createdroom.set({
-      "msg": "นี่คือข้อความอัตโนมัติจากร้าน "+widget.chatName,
+  void createroom() {
+    String pathuser = "User/${widget.senderId}/chat";
+    String pathpharmacy = "Pharmacy/${widget.receiverId}/chat";
+    int currentTimeMillis = DateTime.now().millisecondsSinceEpoch;
+    DatabaseReference refuser = FirebaseDatabase.instance.ref(pathuser);
+    DatabaseReference refpharmacy = FirebaseDatabase.instance.ref(pathpharmacy);
+    String newroom = "room" + "${widget.senderId}" + "-&-" + "${widget.receiverId}";
+    DatabaseReference createdroom = FirebaseDatabase.instance.ref("chatroom/$newroom/message/${msg.length}");
+    createdroom.set({
+      "msg": "นี่คือข้อความอัตโนมัติจากร้าน " + widget.chatName,
       "sender": widget.receiverId,
       "receiver": widget.senderId,
-      "time": 1694937735,
+      "time": currentTimeMillis,
     });
-      refuser.update({
-        "$receiver": newroom ,
-      //"chat":[{"${widget.receiverId}":"${newroom}"}]
+    refuser.update({
+      "$receiver": newroom,
+    });
+    refpharmacy.update({
+      "$sender": newroom,
+    });
 
-      });
-      refpharmacy.update({
-        "$sender": newroom ,
-        //"chat":[{"${widget.senderId}":"${newroom}"}]
-
-      });
-       
-      
-     room = newroom;
-     setState(() {});
-     getroom();
-
+    room = newroom;
+    setState(() {});
+    getroom();
   }
+
   void getroom() {
-    DatabaseReference starCountRef =
-        FirebaseDatabase.instance.ref('User/${widget.senderId}/chat/${widget.receiverId}');
+    DatabaseReference starCountRef = FirebaseDatabase.instance.ref('User/${widget.senderId}/chat/${widget.receiverId}');
     starCountRef.onValue.listen((DatabaseEvent event) {
       print(event.snapshot.value);
       String checkroom = "${event.snapshot.value.toString()}";
-      if(checkroom == "null"){
+      if (checkroom == "null") {
         createroom();
-      }else{
-      room = event.snapshot.value.toString();
+      } else {
+        room = event.snapshot.value.toString();
 
-      getmsg();
+        getmsg();
       }
-      // room = event.snapshot.value.toString();
-
-      // getmsg();
     });
   }
-  
 
   void getmsg() {
     DatabaseReference starCountRef = FirebaseDatabase.instance.ref('chatroom/$room/message');
     starCountRef.onValue.listen((DatabaseEvent event) {
-      print("event getmsg"+"${event.snapshot.value}");
+      print("event getmsg" + "${event.snapshot.value}");
       msg = event.snapshot.value as List;
       print("List ${msg}");
       setState(() {});
@@ -117,13 +110,70 @@ class _ChatScreenState extends State<ChatScreen> {
   void sendMesg() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("chatroom/$room/message/${msg.length}");
     int currentTimeMillis = DateTime.now().millisecondsSinceEpoch;
-    await ref.set({
-      "msg": messageController.text,
-      "sender": widget.senderId,
-      "receiver": widget.receiverId,
-      "time": currentTimeMillis
-    });
+    String messageText = messageController.text;
+
+    if (messageText.isNotEmpty || imgurl.isNotEmpty) {
+      // เพิ่ม URL ลงในข้อความ
+      messageController.text += imgurl.join("\n");
+
+      await ref.set({
+        "msg": messageText,
+        "sender": widget.senderId,
+        "receiver": widget.receiverId,
+        "time": currentTimeMillis,
+      });
+    }
+
     messageController.clear();
+  }
+
+  void _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      imgfile.add(File(image.path));
+      await uploadImagesInChat();
+    }
+  }
+
+  Future<void> uploadImagesInChat() async {
+    if (imgfile.isEmpty) {
+      return;
+    }
+
+
+    ProviderSer profileService = Provider.of<ProviderSer>(context, listen: false);
+    String senderemail = profileService.reademail;
+
+    try {
+      for (int i = 0; i < imgfile.length; i++) {
+        String imageName = const Uuid().v4();
+        final Reference storageRef = FirebaseStorage.instance.ref('users/$senderemail/imageinchat/$imageName');
+        final UploadTask uploadTask = storageRef.putFile(imgfile[i]);
+
+        uploadTask.snapshotEvents.listen((TaskSnapshot event) {
+          uploadProgress = ((event.bytesTransferred / event.totalBytes) * 100).toInt();
+          setState(() {});
+        });
+
+        final TaskSnapshot downloadUrl = await uploadTask.whenComplete(() {
+          print("Upload for $senderemail with Image $imageName");
+        });
+
+        final String url = await downloadUrl.ref.getDownloadURL();
+        imgurl.add(url);
+
+        // เพิ่ม URL ลงใน messageController.text
+        messageController.text += url + '\n';
+      }
+    } catch (e) {
+      print(e);
+      rethrow;
+    } finally {
+      imgfile.clear();
+      uploadProgress = 0;
+      setState(() {});
+    }
   }
 
   @override
@@ -155,15 +205,16 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
               ),
-            ] else ...[],
-            const SizedBox(
-              width: 15,
-            ),
-            Text(
-              ' ${widget.chatName}',
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
+            ] else ...[
+              const SizedBox(
+                width: 15,
+              ),
+              Text(
+                ' ${widget.chatName}',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ],
           ],
         ),
         actions: <Widget>[
@@ -171,7 +222,6 @@ class _ChatScreenState extends State<ChatScreen> {
             icon: Icon(Icons.add_shopping_cart),
             onPressed: () {
               // ตอนที่ปุ่มถูกคลิก
-              // เพิ่มโค้ดที่คุณต้องการให้มันทำอะไรเมื่อปุ่มถูกคลิกที่นี่
             },
           ),
         ],
@@ -211,19 +261,28 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                             ),
                           ],
-                          Container(
-                            decoration: BoxDecoration(
-                              color: msg[index]['sender'] == sender ? Colors.blue : Colors.grey,
-                              borderRadius: BorderRadius.circular(16),
+                          if (msg[index]['msg'].contains("http")) ...[
+                            // แสดงรูปภาพ
+                            Image.network(
+                              msg[index]['msg'],
+                              width: 200, // ปรับขนาดตามที่คุณต้องการ
+                              height: 200, // ปรับขนาดตามที่คุณต้องการ
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "${msg[index]['msg']}",
-                                style: TextStyle(fontSize: 20, color: Colors.white),
+                          ] else ...[
+                            Container(
+                              decoration: BoxDecoration(
+                                color: msg[index]['sender'] == sender ? Colors.blue : Colors.grey,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "${msg[index]['msg']}",
+                                  style: TextStyle(fontSize: 20, color: Colors.white),
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                           Text(
                             formattedTime,
                             style: TextStyle(fontSize: 12, color: Colors.grey),
@@ -238,6 +297,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
+                    IconButton(
+                      onPressed: () {
+                        _pickImage();
+                      },
+                      icon: const Icon(Icons.image),
+                    ),
                     Expanded(
                       child: TextField(
                         controller: messageController,
@@ -252,6 +317,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       },
                       icon: const Icon(Icons.send),
                     ),
+                    
                   ],
                 ),
               ),
@@ -262,4 +328,3 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
-

@@ -1,6 +1,7 @@
 
 // import 'package:firebase_database/firebase_database.dart';
 // import 'package:flutter/material.dart';
+// import 'package:intl/intl.dart';
 
 // import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -50,20 +51,21 @@
 
 //     super.initState();
 //   }
- 
+  
+
 //   void createroom(){
 //       String pathuser = "User/${widget.senderId}/chat";
 //       String pathpharmacy ="Pharmacy/${widget.receiverId}/chat";
-      
+//       int currentTimeMillis = DateTime.now().millisecondsSinceEpoch;
 //       DatabaseReference refuser = FirebaseDatabase.instance.ref(pathuser);
 //       DatabaseReference refpharmacy = FirebaseDatabase.instance.ref(pathpharmacy);
-//       String newroom ="room"+"${widget.senderId}"+"and"+"${widget.receiverId}";
+//       String newroom ="room"+"${widget.senderId}"+"-&-"+"${widget.receiverId}";
 //       DatabaseReference createdroom = FirebaseDatabase.instance.ref("chatroom/$newroom/message/${msg.length}");
 //       createdroom.set({
 //       "msg": "นี่คือข้อความอัตโนมัติจากร้าน "+widget.chatName,
 //       "sender": widget.receiverId,
 //       "receiver": widget.senderId,
-//       "time": 1694937735,
+//       "time": currentTimeMillis,
 //     });
 //       refuser.update({
 //         "$receiver": newroom ,
@@ -114,12 +116,12 @@
 
 //   void sendMesg() async {
 //     DatabaseReference ref = FirebaseDatabase.instance.ref("chatroom/$room/message/${msg.length}");
-
+//     int currentTimeMillis = DateTime.now().millisecondsSinceEpoch;
 //     await ref.set({
 //       "msg": messageController.text,
 //       "sender": widget.senderId,
 //       "receiver": widget.receiverId,
-//       "time": 1694937735,
+//       "time": currentTimeMillis
 //     });
 //     messageController.clear();
 //   }
@@ -135,9 +137,7 @@
 //           },
 //         ),
 //         flexibleSpace: Container(
-//           decoration: const BoxDecoration(
-
-//           ),
+//           decoration: const BoxDecoration(),
 //         ),
 //         title: Row(
 //           children: [
@@ -155,9 +155,7 @@
 //                   ),
 //                 ),
 //               ),
-//             ] else ...[
-
-//             ],
+//             ] else ...[],
 //             const SizedBox(
 //               width: 15,
 //             ),
@@ -169,15 +167,14 @@
 //           ],
 //         ),
 //         actions: <Widget>[
-//     IconButton(
-//       icon: Icon(Icons.shopping_cart), // แทนด้วยไอคอนของตะกร้า add_shopping_cart ไอคอนตะกร้าแอด
-//       onPressed: () {
-//         // ตอนที่ปุ่มถูกคลิก
-//         // เพิ่มโค้ดที่คุณต้องการให้มันทำอะไรเมื่อปุ่มถูกคลิกที่นี่
-//       },
-//     ),
-//   ],
-  
+//           IconButton(
+//             icon: Icon(Icons.add_shopping_cart),
+//             onPressed: () {
+//               // ตอนที่ปุ่มถูกคลิก
+//               // เพิ่มโค้ดที่คุณต้องการให้มันทำอะไรเมื่อปุ่มถูกคลิกที่นี่
+//             },
+//           ),
+//         ],
 //       ),
 //       body: SafeArea(
 //         child: Container(
@@ -185,22 +182,39 @@
 //             children: [
 //               Expanded(
 //                 child: ListView.builder(
-//                     //reverse: true,
 //                   itemCount: msg.length,
 //                   itemBuilder: (context, index) {
+//                     int messageTimeMillis = msg[index]['time'];
+//                     DateTime messageTime = DateTime.fromMillisecondsSinceEpoch(messageTimeMillis);
+//                     String formattedTime = DateFormat('HH:mm').format(messageTime);
+//                     String formattedDate = DateFormat('dd/MM/yyyy').format(messageTime);
+
+//                     String previousDate = '';
+//                     if (index > 0) {
+//                       int previousMessageTimeMillis = msg[index - 1]['time'];
+//                       DateTime previousMessageTime = DateTime.fromMillisecondsSinceEpoch(previousMessageTimeMillis);
+//                       previousDate = DateFormat('dd/MM/yyyy').format(previousMessageTime);
+//                     }
+
 //                     return Padding(
 //                       padding: const EdgeInsets.all(8.0),
-//                       child: Row(
-//                         mainAxisAlignment: msg[index]['sender'] == sender
-//                             ? MainAxisAlignment.end
-//                             : MainAxisAlignment.start,
+//                       child: Column(
+//                         crossAxisAlignment: msg[index]['sender'] == sender
+//                             ? CrossAxisAlignment.end
+//                             : CrossAxisAlignment.start,
 //                         children: [
+//                           if (formattedDate != previousDate) ...[
+//                             Center(
+//                               child: Text(
+//                                 formattedDate,
+//                                 style: TextStyle(fontSize: 14, color: Colors.grey),
+//                               ),
+//                             ),
+//                           ],
 //                           Container(
 //                             decoration: BoxDecoration(
-//                               color: msg[index]['sender'] == sender
-//                                      ? Colors.blue
-//                                      : Colors.grey, // แก้ไขสีพื้นหลังตรงนี้
-//                               borderRadius: BorderRadiusDirectional.circular(16),
+//                               color: msg[index]['sender'] == sender ? Colors.blue : Colors.grey,
+//                               borderRadius: BorderRadius.circular(16),
 //                             ),
 //                             child: Padding(
 //                               padding: const EdgeInsets.all(8.0),
@@ -209,6 +223,10 @@
 //                                 style: TextStyle(fontSize: 20, color: Colors.white),
 //                               ),
 //                             ),
+//                           ),
+//                           Text(
+//                             formattedTime,
+//                             style: TextStyle(fontSize: 12, color: Colors.grey),
 //                           ),
 //                         ],
 //                       ),
@@ -244,3 +262,4 @@
 //     );
 //   }
 // }
+
